@@ -5,33 +5,42 @@
   <title>Pantalla de Alabanzas</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 20px; }
-    textarea { width: 100%; height: 200px; font-size: 16px; }
-    #display { white-space: pre-wrap; font-size: 24px; margin-top: 20px; }
-    .admin { margin-top: 20px; display: none; }
-    #loginBtn { margin-top: 20px; }
+    #display { white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 20px; margin-top: 20px; }
+    textarea, input { width: 100%; font-size: 16px; margin: 5px 0; }
+    textarea { height: 220px; font-family: 'Courier New', monospace; }
+    select, button { font-size: 16px; padding: 5px 10px; margin: 10px; }
+    .admin { display: none; margin-top: 20px; }
   </style>
 </head>
 <body>
   <h1>Alabanza en Vivo</h1>
 
-  <!-- Botón de login para administradores -->
+  <!-- Botón para iniciar sesión -->
   <button id="loginBtn" onclick="login()">Iniciar sesión como administrador</button>
 
-  <!-- Panel de administrador (solo visible si está autenticado y autorizado) -->
+  <!-- Panel de administración -->
   <div class="admin" id="adminPanel">
-    <textarea id="inputText" placeholder="Escribe la letra o notas..."></textarea>
-    <button onclick="updateSong()">Actualizar Alabanza</button>
+    <!-- Selección de canción -->
+    <select id="songSelector">
+      <option value="">Selecciona una alabanza</option>
+    </select>
+    <button onclick="showAddForm()">Agregar nueva alabanza</button>
+
+    <!-- Formulario para agregar nueva alabanza -->
+    <div id="addForm" style="display:none;">
+      <input id="songTitle" type="text" placeholder="Título de la alabanza">
+      <textarea id="songText" placeholder="Letra con acordes..."></textarea>
+      <button onclick="addSong()">Guardar Alabanza</button>
+    </div>
   </div>
 
   <div id="display">Cargando alabanza...</div>
 
   <script type="module">
-    // Importar Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getDatabase, ref, onValue, get, set, update, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-    // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBJEPsI0xrYHM5YdbeO58IgiJ1ocCg1nBg",
       authDomain: "alabanzasemmanuel2.firebaseapp.com",
@@ -46,58 +55,78 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
+    const ALLOWED_UID = "lO3MhmpBIdeVwdUyI9oRGCZizj32"; // ← Reemplaza esto por tu UID real
 
     const display = document.getElementById('display');
     const adminPanel = document.getElementById('adminPanel');
+    const loginBtn = document.getElementById('loginBtn');
+    const songSelector = document.getElementById('songSelector');
 
-    const ALLOWED_UID = "lO3MhmpBIdeVwdUyI9oRGCZizj32"; // ← CAMBIA ESTE UID POR EL TUYO
-
-    // Mostrar letra actual en tiempo real
-    const songRef = ref(db, 'currentSong');
-    onValue(songRef, (snapshot) => {
+    // Mostrar alabanza actual
+    const currentRef = ref(db, 'currentSong');
+    onValue(currentRef, (snapshot) => {
       const data = snapshot.val();
-      display.textContent = data?.text || data || "No hay alabanza aún.";
-    });
-
-    // Función de login con Google
-    window.login = () => {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          if (user.uid === ALLOWED_UID) {
-            adminPanel.style.display = 'block';
-            document.getElementById('loginBtn').style.display = 'none';
-          } else {
-            alert("No tienes permisos para editar.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error de autenticación:", error);
-          alert("No se pudo iniciar sesión.");
-        });
-    };
-
-    // Mostrar el panel admin si ya está logueado
-    onAuthStateChanged(auth, (user) => {
-      if (user && user.uid === ALLOWED_UID) {
-        adminPanel.style.display = 'block';
-        document.getElementById('loginBtn').style.display = 'none';
+      if (data && typeof data === "object") {
+        display.innerHTML = `<strong>${data.title}</strong><br><br>${data.text}`;
+      } else {
+        display.textContent = "No hay alabanza aún.";
       }
     });
 
-    // Función para actualizar letra
-    window.updateSong = () => {
-      const newText = document.getElementById('inputText').value;
-      const newSong = {
-        title: "Alabanza Actualizada",
-        text: newText
-      };
-      set(songRef, newSong);
+    // Iniciar sesión con Google
+    window.login = () => {
+      signInWithPopup(auth, provider).then(result => {
+        if (result.user.uid === ALLOWED_UID) showAdminPanel();
+        else alert("No tienes permisos para administrar.");
+      }).catch(err => alert("Error al iniciar sesión: " + err.message));
     };
-  </script>
-</body>
-</html>
 
+    onAuthStateChanged(auth, user => {
+      if (user && user.uid === ALLOWED_UID) showAdminPanel();
+    });
+
+    function showAdminPanel() {
+      adminPanel.style.display = 'block';
+      loginBtn.style.display = 'none';
+      loadSongs();
+    }
+
+    function loadSongs() {
+      get(ref(db, 'songs')).then(snapshot => {
+        const songs = snapshot.val();
+        for (const key in songs) {
+          const option = document.createElement('option');
+          option.value = key;
+          option.textContent = songs[key].title;
+          songSelector.appendChild(option);
+        }
+        songSelector.addEventListener('change', () => {
+          const key = songSelector.value;
+          if (songs[key]) {
+            set(currentRef, songs[key]);
+          }
+        });
+      });
+    }
+
+    window.showAddForm = () => {
+      document.getElementById('addForm').style.display = 'block';
+    };
+
+    window.addSong = () => {
+      const title = document.getElementById('songTitle').value.trim();
+      const text = document.getElementById('songText').value;
+      if (!title || !text) return alert("Completa todos los campos.");
+      const key = title.toLowerCase().replace(/\s+/g, "_");
+      const songData = { title, text };
+      const updates = {};
+      updates['/songs/' + key] = songData;
+      updates['/currentSong'] = songData;
+      update(ref(db), updates).then(() => {
+        alert("Alabanza agregada.");
+        location.reload();
+      });
+    };
   </script>
 </body>
 </html>
