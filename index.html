@@ -3,14 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Pantalla de Alabanzas</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; padding: 20px; }
-    #display { white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 20px; margin-top: 20px; }
-    textarea, input { width: 100%; font-size: 16px; margin: 5px 0; }
-    textarea { height: 220px; font-family: 'Courier New', monospace; }
-    select, button { font-size: 16px; padding: 5px 10px; margin: 10px; }
-    .admin { display: none; margin-top: 20px; }
-  </style>
+ <style>
+  body { font-family: sans-serif; text-align: center; padding: 20px; }
+  #display {
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    margin-top: 20px;
+    text-align: left; /* ← Esto asegura que el texto se alinee como un cancionero */
+  }
+  textarea, input { width: 100%; font-size: 16px; margin: 5px 0; }
+  textarea {
+    height: 220px;
+    font-family: 'Courier New', monospace;
+  }
+  select, button { font-size: 16px; padding: 5px 10px; margin: 10px; }
+  .admin { display: none; margin-top: 20px; }
+</style>
+
 </head>
 <body>
   <h1>Alabanza en Vivo</h1>
