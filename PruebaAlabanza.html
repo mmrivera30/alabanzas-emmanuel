@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pantalla de Alabanzas</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    textarea { width: 100%; height: 200px; font-size: 16px; }
+    #display { white-space: pre-wrap; font-size: 24px; }
+    .admin { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Alabanza en Vivo</h1>
+
+  <!-- Solo visible para el celular principal -->
+  <div class="admin" id="adminPanel" style="display: none;">
+    <textarea id="inputText" placeholder="Escribe la letra o notas..."></textarea>
+    <button onclick="updateSong()">Actualizar Alabanza</button>
+  </div>
+
+  <div id="display">Cargando alabanza...</div>
+
+  <script type="module">
+    // Configuración Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJEPsI0xrYHM5YdbeO58IgiJ1ocCg1nBg",
+      authDomain: "alabanzasemmanuel2.firebaseapp.com",
+      databaseURL: "https://alabanzasemmanuel2-default-rtdb.firebaseio.com/",
+      projectId: "alabanzasemmanuel2",
+      storageBucket: "alabanzasemmanuel2.firebasestorage.app",
+      messagingSenderId: "454013833170",
+      appId: "1:454013833170:web:828b4a5179a042332cc20b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const songRef = ref(db, 'currentSong');
+
+    // Mostrar cambios en tiempo real
+    const display = document.getElementById('display');
+    onValue(songRef, (snapshot) => {
+      const data = snapshot.val();
+      display.textContent = data || "No hay alabanza aún.";
+    });
+
+    // Si es admin, mostrar panel
+    const isAdmin = window.location.hash === '#admin';
+    if (isAdmin) {
+      document.getElementById('adminPanel').style.display = 'block';
+    }
+
+    // Actualizar canción desde el panel
+    window.updateSong = function() {
+      const newText = document.getElementById('inputText').value;
+      set(songRef, newText);
+    };
+  </script>
+</body>
+</html>
