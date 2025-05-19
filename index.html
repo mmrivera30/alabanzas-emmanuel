@@ -1,54 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Alabanzas Emmanuel</title>
- <style>
-  body { font-family: sans-serif; text-align: center; padding: 20px; }
-  #display {
-    white-space: pre-wrap;
-    font-family: 'Courier New', monospace;
-    font-size: 20px;
-    margin-top: 20px;
-    text-align: left; /* ← Esto asegura que el texto se alinee como un cancionero */
-  }
-  textarea, input { width: 100%; font-size: 16px; margin: 5px 0; }
-  textarea {
-    height: 220px;
-    font-family: 'Courier New', monospace;
-  }
-  select, button { font-size: 16px; padding: 5px 10px; margin: 10px; }
-  .admin { display: none; margin-top: 20px; }
-</style>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantalla de Alabanzas Mejorada</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      background-color: #f9f9f9;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #display {
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      margin-top: 20px;
+      text-align: left;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .chord {
+      color: #e91e63;
+      font-weight: bold;
+    }
+    textarea, input, select, button {
+      width: 100%;
+      font-size: 16px;
+      margin: 10px 0;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 220px;
+      font-family: 'Courier New', monospace;
+    }
+    .admin {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Alabanza en Vivo</h1>
+  <div class="container">
+    <h1>Pantalla de Alabanzas</h1>
 
-  <!-- Botón para iniciar sesión -->
-  <button id="loginBtn" onclick="login()">Iniciar sesión como administrador</button>
+    <!-- Botón para iniciar sesión -->
+    <button id="loginBtn" onclick="login()">Iniciar sesión como administrador</button>
 
-  <!-- Panel de administración -->
-  <div class="admin" id="adminPanel">
-    <!-- Selección de canción -->
-    <select id="songSelector">
-      <option value="">Selecciona una alabanza</option>
+    <!-- Selector de vista -->
+    <select id="viewMode">
+      <option value="all">Mostrar letra con acordes</option>
+      <option value="lyrics">Mostrar solo la letra</option>
     </select>
-    <button onclick="showAddForm()">Agregar nueva alabanza</button>
 
-    <!-- Formulario para agregar nueva alabanza -->
-    <div id="addForm" style="display:none;">
-      <input id="songTitle" type="text" placeholder="Título de la alabanza">
-      <textarea id="songText" placeholder="Letra con acordes..."></textarea>
-      <button onclick="addSong()">Guardar Alabanza</button>
+    <!-- Panel de administración -->
+    <div class="admin" id="adminPanel">
+      <select id="songSelector">
+        <option value="">Selecciona una alabanza</option>
+      </select>
+      <button onclick="showAddForm()">Agregar nueva alabanza</button>
+
+      <div id="addForm" style="display:none;">
+        <input id="songTitle" type="text" placeholder="Título de la alabanza">
+        <textarea id="songText" placeholder="Letra con acordes..."></textarea>
+        <button onclick="addSong()">Guardar Alabanza</button>
+      </div>
     </div>
-  </div>
 
-  <div id="display">Cargando alabanza...</div>
+    <div id="display">Cargando alabanza...</div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getDatabase, ref, onValue, get, set, update, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getDatabase, ref, onValue, get, set, update } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
     const firebaseConfig = {
@@ -65,25 +100,44 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
-    const ALLOWED_UID = "lO3MhmpBIdeVwdUyI9oRGCZizj32"; // ← Reemplaza esto por tu UID real
+    const ALLOWED_UID = "TU_UID_AQUI"; // Reemplazar con UID real
 
     const display = document.getElementById('display');
     const adminPanel = document.getElementById('adminPanel');
     const loginBtn = document.getElementById('loginBtn');
     const songSelector = document.getElementById('songSelector');
+    const viewMode = document.getElementById('viewMode');
 
-    // Mostrar alabanza actual
+    let currentSongData = null;
+
+    function showCurrentSong() {
+      if (!currentSongData) return;
+      const mode = viewMode.value;
+      const lines = currentSongData.text.split("\n");
+      let html = `<strong>${currentSongData.title}</strong><br><br><pre>`;
+
+      for (const line of lines) {
+        const isChord = /^[A-G][#b]?m?(maj|min|dim|aug)?(\s|$)/.test(line.trim());
+        if (mode === "lyrics" && isChord) continue;
+        html += isChord && mode === "all"
+          ? `<span class='chord'>${line}</span>\n`
+          : `${line}\n`;
+      }
+      html += `</pre>`;
+      display.innerHTML = html;
+    }
+
     const currentRef = ref(db, 'currentSong');
-    onValue(currentRef, (snapshot) => {
+    onValue(currentRef, snapshot => {
       const data = snapshot.val();
-      if (data && typeof data === "object") {
-        display.innerHTML = `<strong>${data.title}</strong><br><br>${data.text}`;
-      } else {
-        display.textContent = "No hay alabanza aún.";
+      if (data) {
+        currentSongData = data;
+        showCurrentSong();
       }
     });
 
-    // Iniciar sesión con Google
+    viewMode.addEventListener("change", showCurrentSong);
+
     window.login = () => {
       signInWithPopup(auth, provider).then(result => {
         if (result.user.uid === ALLOWED_UID) showAdminPanel();
@@ -113,7 +167,7 @@
         songSelector.addEventListener('change', () => {
           const key = songSelector.value;
           if (songs[key]) {
-            set(currentRef, songs[key]);
+            set(ref(db, 'currentSong'), songs[key]);
           }
         });
       });
