@@ -8,30 +8,32 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/512px-React-icon.svg.png') no-repeat center center fixed;
-      background-size: cover;
-      backdrop-filter: brightness(0.9);
+      background-color: #fefefe;
+      background-image: url('https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png');
+      background-repeat: no-repeat;
+      background-size: 50%;
+      background-position: center center;
+      color: #313293;
       padding: 2em;
-      color: #222;
     }
     .container {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255,255,255,0.95);
       max-width: 800px;
       margin: auto;
-      padding: 20px;
+      padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h1 { text-align: center; }
+    h1 { text-align: center; color: #313293; }
     select, button, textarea, input {
       width: 100%;
       font-size: 16px;
       margin: 10px 0;
       padding: 10px;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: 1px solid #9a6326;
     }
-    .chord { color: #c2185b; font-weight: bold; }
+    .chord { color: #9a6326; font-weight: bold; }
     pre { white-space: pre-wrap; }
     .admin { display: none; margin-top: 20px; }
     #display {
@@ -40,6 +42,20 @@
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    a.button {
+      display: block;
+      margin: 10px 0;
+      padding: 12px 20px;
+      background-color: #313293;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      text-align: center;
+    }
+    a.button:hover {
+      background-color: #9a6326;
     }
   </style>
 </head>
@@ -54,7 +70,7 @@
   </select>
 </div>
 
-    <div id="display">Cargando alabanza...</div>
+    <div id='display'>Cargando alabanza...</div>
   </div>
   <script type="module" src="./scripts/cantante.js"></script>
 </body>

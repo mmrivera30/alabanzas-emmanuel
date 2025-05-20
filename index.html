@@ -6,47 +6,71 @@
   <title>Alabanzas Emmanuel</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
       margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefefe;
+      background-image: url('https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png');
+      background-repeat: no-repeat;
+      background-size: 50%;
+      background-position: center center;
+      color: #313293;
+      padding: 2em;
     }
     .container {
-      text-align: center;
-      background: white;
+      background: rgba(255,255,255,0.95);
+      max-width: 800px;
+      margin: auto;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h1 {
-      color: #333;
+    h1 { text-align: center; color: #313293; }
+    select, button, textarea, input {
+      width: 100%;
+      font-size: 16px;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #9a6326;
+    }
+    .chord { color: #9a6326; font-weight: bold; }
+    pre { white-space: pre-wrap; }
+    .admin { display: none; margin-top: 20px; }
+    #display {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
     a.button {
       display: block;
       margin: 10px 0;
       padding: 12px 20px;
-      background-color: #007bff;
+      background-color: #313293;
       color: white;
       text-decoration: none;
       border-radius: 6px;
       font-size: 16px;
+      text-align: center;
     }
     a.button:hover {
-      background-color: #0056b3;
+      background-color: #9a6326;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🎵 Alabanzas Emmanuel</h1>
-    <p>Selecciona una vista:</p>
-    <a class="button" href="./musico.html">🎸 Vista del Músico (Administrador Total)</a>
-    <a class="button" href="./cantante.html">🎤 Vista del Cantante (Administrador Parcial)</a>
-    <a class="button" href="./pantalla.html">🖥️ Vista Pública (Pantalla Proyección)</a>
+    
+<p>Selecciona una vista:</p>
+<a class="button" href="./musico.html">🎸 Vista del Músico (Administrador)</a>
+<a class="button" href="./cantante.html">🎤 Vista del Cantante (Administrador)</a>
+<a class="button" href="./pantalla-musico.html">🖥️ Pantalla Pública Músico</a>
+<a class="button" href="./pantalla-cantante.html">🖥️ Pantalla Pública Cantantes</a>
+
+    
   </div>
+  <script type="module" src="./scripts/index"></script>
 </body>
 </html>
