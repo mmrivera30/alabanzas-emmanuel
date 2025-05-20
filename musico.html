@@ -6,42 +6,62 @@
   <title>Administrador Músico</title>
   <style>
     body {
-      font-family: sans-serif;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/512px-React-icon.svg.png') no-repeat center center fixed;
+      background-size: cover;
+      backdrop-filter: brightness(0.9);
       padding: 2em;
+      color: #222;
     }
-    .chord {
-      color: #e91e63;
-      font-weight: bold;
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
     }
-    pre {
-      white-space: pre-wrap;
+    h1 { text-align: center; }
+    select, button, textarea, input {
+      width: 100%;
+      font-size: 16px;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .chord { color: #c2185b; font-weight: bold; }
+    pre { white-space: pre-wrap; }
+    .admin { display: none; margin-top: 20px; }
+    #display {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <h1>Administrador de Músico</h1>
-  <button id="loginBtn" onclick="login()">Iniciar sesión como músico</button>
-  
-  <div id="adminPanel" class="admin" style="display:none;">
-    <select id="globalViewMode">
-      <option value="all">Mostrar letra con acordes</option>
-      <option value="lyrics">Mostrar solo la letra</option>
-    </select>
-    <select id="songSelectorAdmin">
-      <option value="">Selecciona una alabanza</option>
-    </select>
-    <button onclick="showAddForm()">Agregar nueva alabanza</button>
-    <div id="addForm" style="display:none;">
-      <input id="songTitle" type="text" placeholder="Título de la alabanza">
-      <textarea id="songText" placeholder="Letra con acordes..."></textarea>
-      <button onclick="addSong()">Guardar Alabanza</button>
-    </div>
-  </div>
-
-  <select id="songSelectorUser">
+  <div class="container">
+    <h1>Vista del Músico</h1>
+    
+<button id="loginBtn" onclick="login()">Iniciar sesión como músico</button>
+<div id="adminPanel" class="admin">
+  <select id="songSelectorAdmin">
     <option value="">Selecciona una alabanza</option>
   </select>
-  <div id="display">Cargando alabanza...</div>
+  <button onclick="showAddForm()">Agregar nueva alabanza</button>
+  <div id="addForm" style="display:none;">
+    <input id="songTitle" type="text" placeholder="Título de la alabanza">
+    <textarea id="songText" placeholder="Letra con acordes..."></textarea>
+    <button onclick="addSong()">Guardar Alabanza</button>
+  </div>
+</div>
+
+    <div id="display">Cargando alabanza...</div>
+  </div>
   <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>

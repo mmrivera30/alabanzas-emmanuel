@@ -1,6 +1,6 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getDatabase, ref, onValue, get, set, update } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+import { getDatabase, ref, onValue, set, update } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -19,16 +19,12 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 const ALLOWED_UID = "lWrfrkQSxeNX1JbavN8djnQ3fg62";
-
 const loginBtn = document.getElementById('loginBtn');
 const adminPanel = document.getElementById('adminPanel');
-const songSelectorAdmin = document.getElementById('songSelectorAdmin');
-const songSelectorUser = document.getElementById('songSelectorUser');
-const globalViewMode = document.getElementById('globalViewMode');
+const songSelector = document.getElementById('songSelectorAdmin');
 const display = document.getElementById('display');
 
 let allSongs = {};
-let viewMode = "all";
 
 function renderSong(song) {
   if (!song) return display.textContent = "No hay alabanza.";
@@ -36,52 +32,30 @@ function renderSong(song) {
   let html = `<strong>${song.title}</strong><br><br><pre>`;
   for (const line of lines) {
     const isChord = /^[A-G][#b]?m?(maj|min|dim|aug)?(\s|$)/.test(line.trim());
-    if (viewMode === "lyrics" && isChord) continue;
-    html += isChord && viewMode === "all"
-      ? `<span class='chord'>${line}</span>\n`
-      : `${line}\n`;
+    html += isChord ? `<span class='chord'>${line}</span>\n` : `${line}\n`;
   }
   html += `</pre>`;
   display.innerHTML = html;
 }
 
-onValue(ref(db, 'viewModeGlobal'), snapshot => {
-  viewMode = snapshot.val() || "all";
-  const currentKey = songSelectorUser.value || songSelectorAdmin.value;
-  if (currentKey && allSongs[currentKey]) {
-    renderSong(allSongs[currentKey]);
-  }
-});
-
 onValue(ref(db, 'songs'), snapshot => {
   allSongs = snapshot.val() || {};
-  [songSelectorUser, songSelectorAdmin].forEach(selector => {
-    selector.innerHTML = '<option value="">Selecciona una alabanza</option>';
-    for (const key in allSongs) {
-      const option = document.createElement('option');
-      option.value = key;
-      option.textContent = allSongs[key].title;
-      selector.appendChild(option);
-    }
-  });
-});
-
-songSelectorUser?.addEventListener('change', () => {
-  const key = songSelectorUser.value;
-  if (key && allSongs[key]) renderSong(allSongs[key]);
-});
-
-songSelectorAdmin?.addEventListener('change', () => {
-  const key = songSelectorAdmin.value;
-  if (key && allSongs[key]) {
-    set(ref(db, 'currentSong'), allSongs[key]);
-    renderSong(allSongs[key]);
+  songSelector.innerHTML = '<option value="">Selecciona una alabanza</option>';
+  for (const key in allSongs) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = allSongs[key].title;
+    songSelector.appendChild(option);
   }
 });
 
-globalViewMode?.addEventListener('change', () => {
-  const newMode = globalViewMode.value;
-  set(ref(db, 'viewModeGlobal'), newMode);
+songSelector?.addEventListener('change', () => {
+  const key = songSelector.value;
+  if (key && allSongs[key]) {
+    const song = allSongs[key];
+    set(ref(db, 'currentSongCantante'), song);
+    renderSong(song);
+  }
 });
 
 window.login = () => {
@@ -102,7 +76,7 @@ function showAdminPanel() {
   loginBtn.style.display = 'none';
 }
 
-window.showAddForm = () => {};
+window.showAddForm = () => {
   document.getElementById('addForm').style.display = 'block';
 };
 
@@ -114,7 +88,7 @@ window.addSong = () => {};
   const songData = { title, text };
   const updates = {};
   updates['/songs/' + key] = songData;
-  updates['/currentSong'] = songData;
+  updates['/currentSongCantante'] = songData;
   update(ref(db), updates).then(() => {
     alert("Alabanza agregada.");
     location.reload();
