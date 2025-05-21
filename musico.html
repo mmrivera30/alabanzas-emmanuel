@@ -9,61 +9,64 @@
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: #fefefe;
+      background-image: url('https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png');
+      background-repeat: no-repeat;
+      background-size: 30%;
+      background-position: center center;
+      background-attachment: fixed;
       color: #313293;
-      padding: 1.5em;
-      font-size: 15px;
+      padding: 1em;
+      font-size: 14px;
     }
-    h1 { text-align: center; color: #313293; font-size: 22px; }
+    h1 { text-align: center; color: #313293; font-size: 20px; }
     select, button, textarea, input {
       width: 100%;
-      font-size: 14px;
-      margin: 8px 0;
-      padding: 8px;
+      font-size: 13px;
+      margin: 6px 0;
+      padding: 6px;
       border-radius: 6px;
       border: 1px solid #9a6326;
     }
     .chord { color: #9a6326; font-weight: bold; }
-    pre { white-space: pre-wrap; font-size: 14px; line-height: 1.3em; }
+    pre { white-space: pre-wrap; font-size: 13px; line-height: 1.3em; }
     .admin { display: none; margin-top: 20px; }
     #display {
       margin-top: 20px;
-      padding: 12px;
+      padding: 10px;
       background: #fff;
-      border-radius: 8px;
+      border-radius: 6px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-    a.button {
+    a.button, .btn-back {
       display: block;
-      margin: 10px 0;
-      padding: 10px 16px;
+      margin: 10px auto;
+      padding: 8px 16px;
       background-color: #313293;
       color: white;
       text-decoration: none;
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 13px;
       text-align: center;
+      max-width: 250px;
     }
-    a.button:hover {
+    a.button:hover, .btn-back:hover {
       background-color: #9a6326;
     }
-    .logo-fixed {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      width: 100px;
-      opacity: 0.85;
-      z-index: 10;
-    }
     footer {
-      margin-top: 50px;
+      margin-top: 40px;
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
       color: #888;
+    }
+    .logo-inline {
+      vertical-align: middle;
+      width: 50px;
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
-  <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png" class="logo-fixed" alt="Logo" />
+  
   <h1>Vista del Músico</h1>
   
 <button id="loginBtn" onclick="login()">Iniciar sesión como músico</button>
@@ -81,6 +84,7 @@
 
   <div id='display'>Cargando alabanza...</div>
   
+  <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>
