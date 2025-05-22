@@ -18,7 +18,18 @@
       padding: 0.8em;
       font-size: 12px;
     }
-    #display { margin-top: 20px; font-size: 13px; }
+    #display {
+      margin: 40px auto 0 auto;
+      max-width: 700px;
+      background: rgba(255,255,255,0.93);
+      color: #313293;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #0002;
+      padding: 32px 24px;
+      font-size: 20px;
+      min-height: 300px;
+      font-family: 'Segoe UI', sans-serif;
+    }
     footer { margin-top: 30px; text-align: center; font-size: 11px; color: #888; }
     .btn-back {
       display: block;
@@ -26,12 +37,13 @@
       padding: 6px 12px;
       background: #313293;
       color: white;
-      text-align: center;
-      max-width: 200px;
-      text-decoration: none;
       border-radius: 6px;
+      text-decoration: none;
+      max-width: 200px;
       font-size: 12px;
+      text-align: center;
     }
+    .btn-back:hover { background: #9a6326; }
   </style>
 </head>
 <body>
@@ -40,7 +52,7 @@
     <h1 style="font-size:18px;">Pantalla Pública Cantante</h1>
   </div>
   <div id="display">Cargando alabanza...</div>
-  <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
+  <a class="btn-back" href="index.html">🔙 Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
   <script type="module" src="./scripts/pantalla-cantante.js"></script>
 </body>
