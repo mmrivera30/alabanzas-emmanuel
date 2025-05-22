@@ -32,7 +32,7 @@ function renderSong(song) {
   const letra = song.text || "";
   display.innerHTML = `
     <div id="songTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
-    <div id="songText" style="white-space:pre-line;"></div>
+    <pre id="songText" style="font-family:inherit; white-space:pre-wrap; margin:0"></pre>
   `;
   document.getElementById('songText').textContent = letra;
   ajustarFuenteLetra();
