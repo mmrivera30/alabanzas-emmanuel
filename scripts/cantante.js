@@ -18,7 +18,7 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-const ALLOWED_UID = "lWrfrkQSxeNX1JbavN8djnQ3fg62" , "lO3MhmpBIdeVwdUyI9oRGCZizj32";
+const ALLOWED_UID = "lWrfrkQSxeNX1JbavN8djnQ3fg62";
 const loginBtn = document.getElementById('loginBtn');
 const adminPanel = document.getElementById('adminPanel');
 const songSelector = document.getElementById('songSelectorAdmin');
