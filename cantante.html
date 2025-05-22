@@ -5,63 +5,114 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Administrador Cantante</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      width: 100vw;
+      box-sizing: border-box;
+      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       font-family: 'Segoe UI', sans-serif;
-      background-color: #fefefe;
-      background-image: url('https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png');
-      background-repeat: no-repeat;
-      background-size: 30%;
-      background-position: center center;
-      background-attachment: fixed;
+      font-size: 14px;
       color: #313293;
-      padding: 0.8em;
-      font-size: 12px;
+      overflow-x: hidden !important;
     }
-    h1 { text-align: center; color: #313293; font-size: 18px; }
+    body {
+      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
+      overflow-x: hidden !important;
+      padding: 0.8em;
+    }
+    h1 {
+      text-align: center;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-shadow: 0 2px 8px #31329399, 0 1px 0 #fff2;
+      margin-top: 24px;
+      margin-bottom: 16px;
+    }
     select, button, textarea, input {
       width: 100%;
-      font-size: 12px;
+      font-size: 1rem;
       margin: 5px 0;
-      padding: 6px;
-      border-radius: 6px;
+      padding: 8px;
+      border-radius: 8px;
       border: 1px solid #9a6326;
+      box-sizing: border-box;
     }
     .chord { color: #9a6326; font-weight: bold; }
-    pre { white-space: pre-wrap; font-size: 12px; line-height: 1.2em; }
-    .admin { display: none; margin-top: 15px; }
+    pre { white-space: pre-wrap; font-size: 1rem; line-height: 1.4em; }
+    .admin { display: none; margin-top: 18px; }
     #display {
-      margin-top: 15px;
-      padding: 10px;
+      margin: 22px auto 0 auto;
+      padding: 18px 12px;
       background: #fff;
-      border-radius: 6px;
-      box-shadow: 0 0 3px rgba(0,0,0,0.1);
+      color: #313293;
+      border-radius: 16px;
+      box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
+      font-size: 1rem;
+      min-height: 120px;
+      max-width: 700px;
+      width: 98vw;
+      font-family: inherit;
+      white-space: pre-wrap;
+      line-height: 1.4;
+      text-align: left;
+      word-break: break-word;
+      overflow-x: hidden;
+      overflow-wrap: break-word;
     }
     a.button, .btn-back {
       display: block;
-      margin: 8px auto;
-      padding: 7px 14px;
+      margin: 18px auto 0 auto;
+      padding: 8px 18px;
       background-color: #313293;
-      color: white;
+      color: #fff;
       text-decoration: none;
-      border-radius: 6px;
-      font-size: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
       text-align: center;
       max-width: 230px;
+      border: none;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #2223a322;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      box-sizing: border-box;
     }
     a.button:hover, .btn-back:hover {
       background-color: #9a6326;
+      color: #fff;
     }
     footer {
-      margin-top: 30px;
+      margin-top: 28px;
       text-align: center;
       font-size: 11px;
-      color: #888;
+      color: #fff;
+      opacity: 0.7;
+      text-shadow: 0 1px 6px #313293;
     }
     .logo-inline {
       vertical-align: middle;
       width: 40px;
       margin-right: 8px;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      #display { max-width: 99vw; padding: 14px 4vw; font-size: 0.97rem; }
+      select, button, textarea, input { font-size: 0.97rem; }
+    }
+    @media (max-width: 700px) {
+      h1 { font-size: 1.12rem; }
+      #display { padding: 8px 2vw; font-size: 0.95rem; }
+      select, button, textarea, input { font-size: 0.95rem; }
+      a.button, .btn-back { max-width: 99vw; }
+    }
+    @media (max-width: 500px) {
+      #display { padding: 4px 1vw; font-size: 0.85rem; }
+      select, button, textarea, input { font-size: 0.92rem; }
+      h1 { font-size: 1rem; }
     }
   </style>
 </head>
