@@ -5,103 +5,130 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Administrador Músico</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      width: 100vw;
+      box-sizing: border-box;
+      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       font-family: 'Segoe UI', sans-serif;
-      background-color: #fefefe;
-      background-image: url('https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png');
-      background-repeat: no-repeat;
-      background-size: 30%;
-      background-position: center center;
-      background-attachment: fixed;
+      font-size: 13px;
       color: #313293;
-      padding: 0.8em;
-      font-size: 12px;
+      overflow-x: hidden !important;
     }
-    h1 { text-align: center; color: #313293; font-size: 18px; }
-    select, button, textarea, input {
-      width: 100%;
-      font-size: 12px;
-      margin: 5px 0;
-      padding: 6px;
-      border-radius: 6px;
-      border: 1px solid #9a6326;
+    body {
+      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
+      overflow-x: hidden !important;
     }
-        .chord { color: #9a6326; font-weight: bold; }
-    pre { white-space: pre-wrap; font-size: 12px; line-height: 1.2em; }
-    .admin { display: none; margin-top: 15px; }
-    #display {
-      margin-top: 15px;
-      padding: 10px;
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px #2223a366;
       background: #fff;
-      border-radius: 6px;
-      box-shadow: 0 0 3px rgba(0,0,0,0.1);
-
+      object-fit: contain;
+      flex-shrink: 0;
     }
-    pre {
+    .header-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #fff;
+      text-shadow: 0 2px 8px #31329399, 0 1px 0 #fff2;
+      flex: 1 1 auto;
+    }
+    #main {
+      margin: 20px auto 0 auto;
+      background: #fff;
+      color: #313293;
+      border-radius: 16px;
+      box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
+      padding: 22px 16px;
+      font-size: 1rem;
+      min-height: 150px;
+      font-family: inherit;
       white-space: pre-wrap;
-      font-size: 12px;
-      line-height: 1.2em;
-      color: #313293;
+      line-height: 1.4;
+      text-align: left;
+      max-width: 700px;
+      width: 98vw;
+      box-sizing: border-box;
+      word-break: break-word;
+      overflow-x: hidden;
+      overflow-wrap: break-word;
     }
-    .admin { display: none; margin-top: 15px; }
-    #display {
-      margin-top: 15px;
-      padding: 10px;
-      background: #fff;
-      border-radius: 6px;
-      box-shadow: 0 0 3px rgba(0,0,0,0.1);
-      min-height: 100px;
-      font-size: 14px;
-      color: #313293;
-    }
-    a.button, .btn-back {
+    .btn-back {
       display: block;
-      margin: 8px auto;
-      padding: 7px 14px;
-      background-color: #313293;
-      color: white;
+      margin: 20px auto 0 auto;
+      padding: 8px 18px;
+      background: #9a6326;
+      color: #fff;
+      border-radius: 8px;
       text-decoration: none;
-      border-radius: 6px;
-      font-size: 12px;
+      max-width: 190px;
+      font-size: 1rem;
       text-align: center;
-      max-width: 230px;
+      border: none;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #2223a322;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      box-sizing: border-box;
     }
-    a.button:hover, .btn-back:hover {
-      background-color: #9a6326;
+    .btn-back:hover {
+      background: #313293;
+      color: #fff;
+      border: 1px solid #313293;
     }
     footer {
-      margin-top: 30px;
+      margin-top: 28px;
       text-align: center;
       font-size: 11px;
-      color: #888;
+      color: #fff;
+      opacity: 0.7;
+      text-shadow: 0 1px 6px #313293;
     }
-    .logo-inline {
-      vertical-align: middle;
-      width: 40px;
-      margin-right: 8px;
+    @media (max-width: 900px) {
+      #main { max-width: 99vw; padding: 14px 4vw; font-size: 0.92rem; }
+    }
+    @media (max-width: 700px) {
+      .header-title { font-size: 1rem; }
+      .header img { width: 28px; height: 28px; }
+      #main { padding: 7px 2vw; font-size: 0.91rem; }
+      .btn-back { max-width: 99vw; }
+    }
+    @media (max-width: 500px) {
+      .header {
+        flex-direction: column;
+        gap: 5px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+      #main { padding: 3px 1vw; font-size: 0.85rem; }
     }
   </style>
 </head>
 <body>
-  
-  <h1>Vista del Músico</h1>
-  
-  <button id="loginBtn" onclick="login()">Iniciar sesión como músico</button>
-  <div id="adminPanel" class="admin">
-    <select id="songSelectorAdmin">
-      <option value="">Selecciona una alabanza</option>
-    </select>
-    <button onclick="showAddForm()">Agregar nueva alabanza</button>
-    <div id="addForm" style="display:none;">
-      <input id="songTitle" type="text" placeholder="Título de la alabanza">
-      <textarea id="songText" placeholder="Letra con acordes..."></textarea>
-      <button onclick="addSong()">Guardar Alabanza</button>
-    </div>
+  <div class="header">
+    <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png" alt="Logo" />
+    <span class="header-title">Administrador Músico</span>
   </div>
-
-  <div id='display'>Cargando alabanza...</div>
-  
+  <div id="main">
+    <!-- Aquí va el contenido principal del administrador músico -->
+    <h2>Bienvenido, músico</h2>
+    <p>Utiliza esta interfaz para controlar la pantalla pública del músico y gestionar las canciones o partituras en tiempo real.</p>
+    <!-- Puedes agregar aquí más controles, formularios, tablas, etc. según tu lógica -->
+  </div>
   <a class="btn-back" href="index.html">🔙 Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
   <script type="module" src="./scripts/musico.js"></script>
