@@ -18,8 +18,6 @@
       overflow-x: hidden !important;
     }
     body {
-      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
-      overflow-x: hidden !important;
       padding: 0.8em;
     }
     h1 {
@@ -28,7 +26,6 @@
       font-size: 18px;
       font-weight: 800;
       letter-spacing: 1.2px;
-      text-shadow: 0 2px 8px #31329399, 0 1px 0 #fff2;
       margin-top: 24px;
       margin-bottom: 16px;
     }
@@ -41,8 +38,6 @@
       border: 1px solid #9a6326;
       box-sizing: border-box;
     }
-    .chord { color: #9a6326; font-weight: bold; }
-    pre { white-space: pre-wrap; font-size: 13px; line-height: 1.4em; }
     .admin { display: none; margin-top: 18px; }
     #display {
       margin: 22px auto 0 auto;
@@ -51,17 +46,12 @@
       color: #313293;
       border-radius: 16px;
       box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
-      font-size: 13px;
+      font-size: 22px;
       min-height: 120px;
       max-width: 700px;
       width: 98vw;
-      font-family: inherit;
       white-space: pre-wrap;
       line-height: 1.4;
-      text-align: left;
-      word-break: break-word;
-      overflow-x: hidden;
-      overflow-wrap: break-word;
       transition: font-size 0.2s;
     }
     a.button, .btn-back {
@@ -94,26 +84,6 @@
       opacity: 0.7;
       text-shadow: 0 1px 6px #313293;
     }
-    .logo-inline {
-      vertical-align: middle;
-      width: 40px;
-      margin-right: 8px;
-    }
-    @media (max-width: 900px) {
-      #display { max-width: 99vw; padding: 14px 4vw; font-size: 13px; }
-      select, button, textarea, input { font-size: 13px; }
-    }
-    @media (max-width: 700px) {
-      h1 { font-size: 15px; }
-      #display { padding: 8px 2vw; font-size: 13px; }
-      select, button, textarea, input { font-size: 13px; }
-      a.button, .btn-back { max-width: 99vw; }
-    }
-    @media (max-width: 500px) {
-      #display { padding: 4px 1vw; font-size: 12px; }
-      select, button, textarea, input { font-size: 12px; }
-      h1 { font-size: 14px; }
-    }
   </style>
 </head>
 <body>
@@ -124,7 +94,6 @@
   <div id="adminPanel" class="admin">
     <select id="songSelectorAdmin">
       <option value="">Selecciona una alabanza</option>
-      <!-- Opciones dinámicas por JS -->
     </select>
     <button onclick="showAddForm()">Agregar nueva alabanza</button>
     <div id="addForm" style="display:none;">
@@ -139,14 +108,13 @@
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
   <script>
-    // Simulación de tu base de datos local de alabanzas con letras
+    // Ejemplo base de datos local
     const alabanzas = [
-      { id: '1', titulo: 'Grande es Jehová', letra: 'Grande es Jehová, y digno de suprema alabanza...' },
-      { id: '2', titulo: 'Alabad a Jehová', letra: 'Alabad a Jehová, naciones todas; pueblos todos, alabadle...' },
-      { id: '3', titulo: 'Digno es el Señor', letra: 'Digno es el Señor, de recibir la gloria y el honor...' },
-      { id: '4', titulo: 'Cristo vive', letra: 'Cristo vive, Él es nuestro Rey...' },
-      { id: '5', titulo: 'Solo en Jesús', letra: 'Solo en Jesús, mi esperanza está...' }
-      // ...agrega aquí más alabanzas
+      { id: '1', titulo: 'Grande es Jehová', letra: 'Grande es Jehová,\ny digno de suprema alabanza.' },
+      { id: '2', titulo: 'Alabad a Jehová', letra: 'Alabad a Jehová,\nnaciones todas; pueblos todos, alabadle.' },
+      { id: '3', titulo: 'Digno es el Señor', letra: 'Digno es el Señor,\nde recibir la gloria y el honor.' },
+      { id: '4', titulo: 'Cristo vive', letra: 'Cristo vive,\nÉl es nuestro Rey.' },
+      { id: '5', titulo: 'Solo en Jesús', letra: 'Solo en Jesús,\nmi esperanza está.' }
     ];
 
     function renderAlabanzas() {
@@ -176,9 +144,8 @@
     // Ajuste automático de fuente en #display
     function ajustarFuenteDisplay() {
       const display = document.getElementById('display');
-      let fontSize = 22; // tamaño inicial en px
+      let fontSize = 22;
       display.style.fontSize = fontSize + 'px';
-      // Bucle: reduce tamaño hasta que no haya overflow (desborde)
       while (
         (display.scrollHeight > display.clientHeight || display.scrollWidth > display.clientWidth)
         && fontSize > 10
@@ -188,8 +155,7 @@
       }
     }
 
-    // Aquí puedes agregar tu lógica de login y mostrar panel admin
-
+    // Funciones de login y agregar alabanzas
     function login() {
       document.getElementById('adminPanel').style.display = "block";
       document.getElementById('loginBtn').style.display = "none";
@@ -204,13 +170,12 @@
       const letra = document.getElementById('songText').value.trim();
       if (titulo && letra) {
         alabanzas.push({ id: Date.now().toString(), titulo, letra });
-        renderAlabanzas(); // Refresca la lista
+        renderAlabanzas();
         document.getElementById('songTitle').value = '';
         document.getElementById('songText').value = '';
         document.getElementById('addForm').style.display = 'none';
       }
     }
   </script>
-  <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>
