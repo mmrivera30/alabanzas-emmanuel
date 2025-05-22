@@ -25,7 +25,7 @@
     h1 {
       text-align: center;
       color: #fff;
-      font-size: 1.4rem;
+      font-size: 18px;
       font-weight: 800;
       letter-spacing: 1.2px;
       text-shadow: 0 2px 8px #31329399, 0 1px 0 #fff2;
@@ -34,7 +34,7 @@
     }
     select, button, textarea, input {
       width: 100%;
-      font-size: 1rem;
+      font-size: 13px;
       margin: 5px 0;
       padding: 8px;
       border-radius: 8px;
@@ -42,7 +42,7 @@
       box-sizing: border-box;
     }
     .chord { color: #9a6326; font-weight: bold; }
-    pre { white-space: pre-wrap; font-size: 1rem; line-height: 1.4em; }
+    pre { white-space: pre-wrap; font-size: 13px; line-height: 1.4em; }
     .admin { display: none; margin-top: 18px; }
     #display {
       margin: 22px auto 0 auto;
@@ -51,7 +51,7 @@
       color: #313293;
       border-radius: 16px;
       box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
-      font-size: 1rem;
+      font-size: 13px;
       min-height: 120px;
       max-width: 700px;
       width: 98vw;
@@ -71,7 +71,7 @@
       color: #fff;
       text-decoration: none;
       border-radius: 8px;
-      font-size: 1rem;
+      font-size: 13px;
       text-align: center;
       max-width: 230px;
       border: none;
@@ -100,19 +100,19 @@
     }
     /* Responsive adjustments */
     @media (max-width: 900px) {
-      #display { max-width: 99vw; padding: 14px 4vw; font-size: 0.97rem; }
-      select, button, textarea, input { font-size: 0.97rem; }
+      #display { max-width: 99vw; padding: 14px 4vw; font-size: 13px; }
+      select, button, textarea, input { font-size: 13px; }
     }
     @media (max-width: 700px) {
-      h1 { font-size: 1.08rem; }
-      #display { padding: 8px 2vw; font-size: 0.95rem; }
-      select, button, textarea, input { font-size: 0.95rem; }
+      h1 { font-size: 15px; }
+      #display { padding: 8px 2vw; font-size: 13px; }
+      select, button, textarea, input { font-size: 13px; }
       a.button, .btn-back { max-width: 99vw; }
     }
     @media (max-width: 500px) {
-      #display { padding: 4px 1vw; font-size: 0.85rem; }
-      select, button, textarea, input { font-size: 0.92rem; }
-      h1 { font-size: 1rem; }
+      #display { padding: 4px 1vw; font-size: 12px; }
+      select, button, textarea, input { font-size: 12px; }
+      h1 { font-size: 14px; }
     }
   </style>
 </head>
@@ -122,8 +122,10 @@
   
   <button id="loginBtn" onclick="login()">Iniciar sesión como músico</button>
   <div id="adminPanel" class="admin">
+    <input type="text" id="searchAlabanza" placeholder="Buscar alabanza...">
     <select id="songSelectorAdmin">
       <option value="">Selecciona una alabanza</option>
+      <!-- Opciones dinámicas aquí -->
     </select>
     <button onclick="showAddForm()">Agregar nueva alabanza</button>
     <div id="addForm" style="display:none;">
