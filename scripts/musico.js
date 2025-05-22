@@ -73,9 +73,9 @@ function loadSongs() {
 songSelector?.addEventListener('change', () => {
   const key = songSelector.value;
   if (key && allSongs[key]) {
-    const song = allSongs[key];
-    set(ref(db, 'currentSongMusico'), song);
-    renderSong(song);
+    const { title, text } = allSongs[key];
+    set(ref(db, 'currentSongMusico'), { title, text });
+    renderSong({ title, text });
   } else {
     display.innerHTML = "";
   }
