@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/fireba
 import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
+// CONFIGURA tus datos reales de Firebase aquí:
 const firebaseConfig = {
   apiKey: "AIzaSyBJEPsI0xrYHM5YdbeO58IgiJ1ocCg1nBg",
   authDomain: "alabanzasemmanuel2.firebaseapp.com",
@@ -28,7 +29,6 @@ const inputText = document.getElementById("songText");
 let allSongs = {};
 
 function renderSong(song) {
-  // Muestra el título y la letra en el área #display
   const letra = song.text || "";
   display.innerHTML = `
     <div id="songTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
@@ -70,6 +70,7 @@ function loadSongs() {
   });
 }
 
+// CORREGIDO: Sólo pasa título y texto a renderSong y a la base
 songSelector?.addEventListener('change', () => {
   const key = songSelector.value;
   if (key && allSongs[key]) {
@@ -108,16 +109,13 @@ window.addSong = () => {
   const text = inputText.value.trim();
   if (!title || !text) return alert("Completa todos los campos.");
   const key = title.toLowerCase().replace(/\s+/g, "_");
-  set(ref(db, 'songsMusico/' + key), { title, text })
-    .then(() => {
-      // Limpia los campos del formulario después de agregar
-      inputTitle.value = "";
-      inputText.value = "";
-      addForm.style.display = 'none';
-      // Selecciona la canción recién agregada y la muestra
-      songSelector.value = key;
-      renderSong({ title, text });
-    });
+  set(ref(db, 'songsMusico/' + key), { title, text }).then(() => {
+    inputTitle.value = "";
+    inputText.value = "";
+    addForm.style.display = 'none';
+    renderSong({ title, text });
+    songSelector.value = key;
+  });
 };
 
 window.addEventListener('resize', ajustarFuenteLetra);
