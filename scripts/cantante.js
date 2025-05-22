@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -22,7 +21,7 @@ let allSongs = {};
 
 function renderSong(song) {
   const lines = song.text.split("\n");
-  let html = `<strong>\${song.title}</strong><br><br><pre>`;
+  let html = `<strong>${song.title}</strong><br><br><pre>`;
   for (const line of lines) {
     html += line + "\n";
   }
