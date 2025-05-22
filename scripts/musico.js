@@ -28,13 +28,33 @@ const addForm = document.getElementById("addForm");
 let allSongs = {};
 
 function renderSong(song) {
-  const lines = song.text.split("\n");
-  let html = `<strong>${song.title}</strong><br><br><pre>`;
-  for (const line of lines) {
-    html += line + "\n";
+  // Separa el título y el texto en dos divs, el título NO cambia de tamaño
+  display.innerHTML = `
+    <div id="songTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
+    <div id="songText" style="white-space:pre-line;"></div>
+  `;
+  document.getElementById('songText').textContent = song.text;
+  ajustarFuenteLetra(); // Ajusta SOLO la letra de la canción
+}
+
+function ajustarFuenteLetra() {
+  const letraDiv = document.getElementById('songText');
+  if (!letraDiv) return;
+  let fontSize = 32;
+  letraDiv.style.fontSize = fontSize + 'px';
+  // Solo ajustar si hay texto
+  if (!letraDiv.textContent.trim()) return;
+  // Restamos el alto del título para el cálculo de overflow vertical
+  const displayBox = display.getBoundingClientRect();
+  const titleDiv = document.getElementById('songTitle');
+  const titleHeight = titleDiv ? titleDiv.offsetHeight : 0;
+  while (
+    (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width)
+    && fontSize > 10
+  ) {
+    fontSize -= 1;
+    letraDiv.style.fontSize = fontSize + "px";
   }
-  html += "</pre>";
-  display.innerHTML = html;
 }
 
 function loadSongs() {
@@ -57,6 +77,8 @@ songSelector?.addEventListener('change', () => {
     const song = allSongs[key];
     set(ref(db, 'currentSongMusico'), song);
     renderSong(song);
+  } else {
+    display.innerHTML = "";
   }
 });
 
@@ -92,3 +114,6 @@ window.addSong = () => {
   document.getElementById("songText").value = "";
   addForm.style.display = 'none';
 };
+
+// Ajusta la fuente de la letra si se redimensiona la ventana
+window.addEventListener('resize', ajustarFuenteLetra);
