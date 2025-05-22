@@ -5,14 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pantalla Pública Cantante</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       min-height: 100vh;
+      width: 100vw;
       box-sizing: border-box;
       background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       font-family: 'Segoe UI', sans-serif;
       color: #313293;
       font-size: 16px;
+      overflow-x: hidden;
     }
     .header {
       display: flex;
@@ -21,6 +24,7 @@
       gap: 16px;
       margin-top: 32px;
       margin-bottom: 16px;
+      flex-wrap: wrap;
     }
     .header img {
       width: 54px;
@@ -29,6 +33,7 @@
       box-shadow: 0 4px 16px #2223a366;
       background: #fff;
       object-fit: contain;
+      flex-shrink: 0;
     }
     .header-title {
       font-size: 2rem;
@@ -36,6 +41,7 @@
       letter-spacing: 1.5px;
       color: #fff;
       text-shadow: 0 2px 14px #31329399, 0 1px 0 #fff2;
+      flex: 1 1 auto;
     }
     #display {
       margin: 40px auto 0 auto;
@@ -54,6 +60,8 @@
       max-width: 720px;
       width: 100%;
       box-sizing: border-box;
+      word-break: break-word;
+      /* fuerza quiebres de palabra si hay cosas largas */
     }
     .chord {
       color: #9a6326;
@@ -62,6 +70,7 @@
       padding: 0;
       border-radius: 0;
       display: inline;
+      word-break: break-word;
     }
     .btn-back {
       display: block;
@@ -79,6 +88,7 @@
       box-shadow: 0 2px 10px #2223a322;
       transition: background 0.2s, color 0.2s;
       cursor: pointer;
+      box-sizing: border-box;
     }
     .btn-back:hover {
       background: #313293;
@@ -93,14 +103,25 @@
       opacity: 0.7;
       text-shadow: 0 1px 6px #313293;
     }
+
+    /* Responsive adjustments */
     @media (max-width: 900px) {
-      #display { max-width: 98vw; padding: 18px 4vw; font-size: 1rem; }
+      #display { max-width: 98vw; padding: 18px 3vw; font-size: 1rem; }
     }
     @media (max-width: 700px) {
       .header-title { font-size: 1.2rem; }
       .header img { width: 35px; height: 35px; }
-      #display { padding: 10px 2vw; font-size: 0.95rem; }
-      .btn-back { max-width: 98vw; }
+      #display { padding: 10px 2vw; font-size: 0.97rem; }
+      .btn-back { max-width: 99vw; }
+    }
+    @media (max-width: 500px) {
+      .header {
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 16px;
+        margin-bottom: 8px;
+      }
+      #display { padding: 7px 1vw; font-size: 0.93rem; }
     }
   </style>
 </head>
