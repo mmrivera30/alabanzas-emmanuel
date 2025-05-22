@@ -11,13 +11,16 @@
       min-height: 100vh;
       width: 100vw;
       box-sizing: border-box;
-      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
+      background: #313293;
       font-family: 'Segoe UI', sans-serif;
       color: #313293;
-      font-size: 14px;
+      font-size: 16px;
       overflow-x: hidden !important;
     }
     body {
+      /* Fondo con la nueva imagen, centrada y cubriendo el fondo */
+      background: #313293 url('https://i.postimg.cc/hjvSRhPN/Dise-o-sin-t-tulo.png') no-repeat center center fixed;
+      background-size: cover;
       overflow-x: hidden !important;
     }
     .header {
@@ -30,8 +33,8 @@
       flex-wrap: wrap;
     }
     .header img {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       border-radius: 8px;
       box-shadow: 0 4px 16px #2223a366;
       background: #fff;
@@ -39,7 +42,7 @@
       flex-shrink: 0;
     }
     .header-title {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: 1.2px;
       color: #fff;
@@ -52,15 +55,15 @@
       color: #313293;
       border-radius: 16px;
       box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
-      padding: 18px 10px;
-      font-size: 0.93rem;
+      padding: 22px 16px;
+      font-size: 1.04rem;
       min-height: 150px;
       font-family: inherit;
       white-space: pre-wrap;
       line-height: 1.4;
       text-align: left;
       max-width: 700px;
-      width: 99vw;
+      width: 98vw;
       box-sizing: border-box;
       word-break: break-word;
       overflow-x: hidden;
@@ -75,7 +78,7 @@
       display: inline;
       word-break: break-word;
       overflow-wrap: break-word;
-      font-size: 0.93rem;
+      font-size: 1.04rem;
     }
     .btn-back {
       display: block;
@@ -86,7 +89,7 @@
       border-radius: 8px;
       text-decoration: none;
       max-width: 190px;
-      font-size: 0.95rem;
+      font-size: 1rem;
       text-align: center;
       border: none;
       font-weight: bold;
@@ -103,19 +106,19 @@
     footer {
       margin-top: 28px;
       text-align: center;
-      font-size: 11px;
+      font-size: 12px;
       color: #fff;
       opacity: 0.7;
       text-shadow: 0 1px 6px #313293;
     }
 
     @media (max-width: 900px) {
-      #display { max-width: 98vw; padding: 10px 2vw; font-size: 0.88rem; }
+      #display { max-width: 99vw; padding: 14px 4vw; font-size: 0.98rem; }
     }
     @media (max-width: 700px) {
-      .header-title { font-size: 1rem; }
-      .header img { width: 27px; height: 27px; }
-      #display { padding: 7px 1vw; font-size: 0.82rem; }
+      .header-title { font-size: 1.1rem; }
+      .header img { width: 28px; height: 28px; }
+      #display { padding: 7px 2vw; font-size: 0.92rem; }
       .btn-back { max-width: 99vw; }
     }
     @media (max-width: 500px) {
@@ -125,13 +128,13 @@
         margin-top: 10px;
         margin-bottom: 5px;
       }
-      #display { padding: 3px 0.5vw; font-size: 0.78rem; }
+      #display { padding: 3px 1vw; font-size: 0.86rem; }
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <img src="https://i.postimg.cc/hjvSRhPN/Dise-o-sin-t-tulo.png" alt="Logo" />
+    <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png" alt="Logo" />
     <span class="header-title">Pantalla Pública Cantante</span>
   </div>
   <div id="display">Cargando alabanza...</div>
