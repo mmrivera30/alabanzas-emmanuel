@@ -15,7 +15,10 @@
       font-family: 'Segoe UI', sans-serif;
       color: #313293;
       font-size: 16px;
-      overflow-x: hidden;
+      overflow-x: hidden !important;
+    }
+    body {
+      overflow-x: hidden !important;
     }
     .header {
       display: flex;
@@ -56,12 +59,12 @@
       white-space: pre-wrap;
       line-height: 1.5;
       text-align: left;
-      overflow-x: auto;
       max-width: 720px;
       width: 100%;
       box-sizing: border-box;
       word-break: break-word;
-      /* fuerza quiebres de palabra si hay cosas largas */
+      overflow-x: hidden;
+      overflow-wrap: break-word;
     }
     .chord {
       color: #9a6326;
@@ -71,6 +74,7 @@
       border-radius: 0;
       display: inline;
       word-break: break-word;
+      overflow-wrap: break-word;
     }
     .btn-back {
       display: block;
