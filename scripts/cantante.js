@@ -1,10 +1,16 @@
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
-import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getDatabase, ref, onValue, set, update } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 const firebaseConfig = {
-  databaseURL: "https://alabanzasemmanuel2-default-rtdb.firebaseio.com/"
+  apiKey: "AIzaSyBJEPsI0xrYHM5YdbeO58IgiJ1ocCg1nBg",
+  authDomain: "alabanzasemmanuel2.firebaseapp.com",
+  databaseURL: "https://alabanzasemmanuel2-default-rtdb.firebaseio.com/",
+  projectId: "alabanzasemmanuel2",
+  storageBucket: "alabanzasemmanuel2.appspot.com",
+  messagingSenderId: "454013833170",
+  appId: "1:454013833170:web:828b4a5179a042332cc20b"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -12,37 +18,36 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-const CANTANTE_UID = "lWrfrkQSxeNX1JbavN8djnQ3fg62";
-const songSelector = document.getElementById("songSelectorAdmin");
-const adminPanel = document.getElementById("adminPanel");
-const display = document.getElementById("display");
-const addForm = document.getElementById("addForm");
+const ALLOWED_UID = "lWrfrkQSxeNX1JbavN8djnQ3fg62";
+const loginBtn = document.getElementById('loginBtn');
+const adminPanel = document.getElementById('adminPanel');
+const songSelector = document.getElementById('songSelectorAdmin');
+const display = document.getElementById('display');
 
 let allSongs = {};
 
 function renderSong(song) {
+  if (!song) return display.textContent = "No hay alabanza.";
   const lines = song.text.split("\n");
   let html = `<strong>${song.title}</strong><br><br><pre>`;
   for (const line of lines) {
-    html += line + "\n";
+    const isChord = /^[A-G][#b]?m?(maj|min|dim|aug)?(\s|$)/.test(line.trim());
+    html += isChord ? `<span class='chord'>${line}</span>\n` : `${line}\n`;
   }
-  html += "</pre>";
+  html += `</pre>`;
   display.innerHTML = html;
 }
 
-function loadSongs() {
-  onValue(ref(db, 'songsCantante'), snapshot => {
-    allSongs = snapshot.val() || {};
-    songSelector.innerHTML = '<option value="">Selecciona una alabanza</option>';
-    Object.keys(allSongs).forEach(key => {
-      const song = allSongs[key];
-      const opt = document.createElement("option");
-      opt.value = key;
-      opt.textContent = song.title;
-      songSelector.appendChild(opt);
-    });
-  });
-}
+onValue(ref(db, 'songs'), snapshot => {
+  allSongs = snapshot.val() || {};
+  songSelector.innerHTML = '<option value="">Selecciona una alabanza</option>';
+  for (const key in allSongs) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = allSongs[key].title;
+    songSelector.appendChild(option);
+  }
+});
 
 songSelector?.addEventListener('change', () => {
   const key = songSelector.value;
@@ -54,29 +59,38 @@ songSelector?.addEventListener('change', () => {
 });
 
 window.login = () => {
-  signInWithPopup(auth, provider);
+  signInWithPopup(auth, provider)
+    .then(result => {
+      if (result.user.uid === ALLOWED_UID) showAdminPanel();
+      else alert("No tienes permisos para administrar.");
+    })
+    .catch(err => alert("Error de autenticación: " + err.message));
 };
 
 onAuthStateChanged(auth, user => {
-  if (user?.uid === CANTANTE_UID) {
-    adminPanel.style.display = 'block';
-    loadSongs();
-  } else {
-    alert("Acceso restringido al cantante.");
-  }
+  if (user && user.uid === ALLOWED_UID) showAdminPanel();
 });
 
+function showAdminPanel() {
+  adminPanel.style.display = 'block';
+  loginBtn.style.display = 'none';
+}
+
 window.showAddForm = () => {
-  addForm.style.display = 'block';
+  document.getElementById('addForm').style.display = 'block';
 };
 
-window.addSong = () => {
-  const title = document.getElementById("songTitle").value.trim();
-  const text = document.getElementById("songText").value.trim();
+window.addSong = () => {};
+  const title = document.getElementById('songTitle').value.trim();
+  const text = document.getElementById('songText').value;
   if (!title || !text) return alert("Completa todos los campos.");
   const key = title.toLowerCase().replace(/\s+/g, "_");
-  set(ref(db, 'songsCantante/' + key), { title, text });
-  document.getElementById("songTitle").value = "";
-  document.getElementById("songText").value = "";
-  addForm.style.display = 'none';
+  const songData = { title, text };
+  const updates = {};
+  updates['/songs/' + key] = songData;
+  updates['/currentSongCantante'] = songData;
+  update(ref(db), updates).then(() => {
+    alert("Alabanza agregada.");
+    location.reload();
+  });
 };
