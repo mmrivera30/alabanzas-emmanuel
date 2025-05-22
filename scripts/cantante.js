@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/fireba
 import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-// PON AQUÍ TUS DATOS COMPLETOS DE FIREBASE:
+// CONFIGURA tus datos reales de Firebase aquí:
 const firebaseConfig = {
   apiKey: "AIzaSyBJEPsI0xrYHM5YdbeO58IgiJ1ocCg1nBg",
   authDomain: "alabanzasemmanuel2.firebaseapp.com",
@@ -18,6 +18,7 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// UIDs permitidos para el cantante
 const CANTANTE_UIDS = ["lWrfrkQSxeNX1JbavN8djnQ3fg62", "lO3MhmpBIdeVwdUyI9oRGCZizj32"];
 const songSelector = document.getElementById("songSelectorAdmin");
 const adminPanel = document.getElementById("adminPanel");
@@ -59,24 +60,16 @@ songSelector?.addEventListener('change', () => {
   }
 });
 
-// MODIFICADO: Manejo de errores y resultado del login
 window.login = () => {
   signInWithPopup(auth, provider)
-    .then(result => {
-      // Login exitoso. Firebase actualizará el estado y se llamará a onAuthStateChanged.
-    })
     .catch(error => {
       alert("Error al iniciar sesión: " + error.message);
       console.error(error);
     });
 };
 
-// MODIFICADO: No alertar si no hay usuario (solo si hay usuario no autorizado)
 onAuthStateChanged(auth, user => {
-  if (!user) {
-    // No mostrar alerta, solo esperamos a que el usuario inicie sesión.
-    return;
-  }
+  if (!user) return;
   if (CANTANTE_UIDS.includes(user.uid)) {
     adminPanel.style.display = 'block';
     loadSongs();
