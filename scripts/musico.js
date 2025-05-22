@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/fireba
 import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
+// CONFIGURA tus datos reales de Firebase aquí:
 const firebaseConfig = {
   apiKey: "AIzaSyBJEPsI0xrYHM5YdbeO58IgiJ1ocCg1nBg",
   authDomain: "alabanzasemmanuel2.firebaseapp.com",
@@ -17,6 +18,7 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// UIDs permitidos para el músico (reemplaza por los correctos)
 const MUSICO_UIDS = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
 const songSelector = document.getElementById("songSelectorAdmin");
 const adminPanel = document.getElementById("adminPanel");
@@ -26,8 +28,8 @@ const addForm = document.getElementById("addForm");
 let allSongs = {};
 
 function renderSong(song) {
-  // Lee el campo correcto (letra o text)
-  const letra = song.text || song.letra || "";
+  // Lee el campo 'text' de la base de datos para letra y acordes
+  const letra = song.text || "";
   display.innerHTML = `
     <div id="songTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
     <div id="songText" style="white-space:pre-line;"></div>
@@ -103,10 +105,10 @@ window.showAddForm = () => {
 
 window.addSong = () => {
   const title = document.getElementById("songTitle").value.trim();
-  const letra = document.getElementById("songText").value.trim();
-  if (!title || !letra) return alert("Completa todos los campos.");
+  const text = document.getElementById("songText").value.trim();
+  if (!title || !text) return alert("Completa todos los campos.");
   const key = title.toLowerCase().replace(/\s+/g, "_");
-  set(ref(db, 'songsMusico/' + key), { title, letra });
+  set(ref(db, 'songsMusico/' + key), { title, text });
   document.getElementById("songTitle").value = "";
   document.getElementById("songText").value = "";
   addForm.style.display = 'none';
