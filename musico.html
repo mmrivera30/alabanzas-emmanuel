@@ -165,13 +165,14 @@
       // ...agrega aquí más alabanzas
     ];
 
-    function renderAlabanzas() {
+    function renderAlabanzas(selectedId = "") {
       const select = document.getElementById('songSelectorAdmin');
       select.innerHTML = '<option value="">Selecciona una alabanza</option>';
       alabanzas.forEach(a => {
         const opt = document.createElement('option');
         opt.value = a.id;
         opt.textContent = a.titulo;
+        if (a.id === selectedId) opt.selected = true;
         select.appendChild(opt);
       });
     }
@@ -221,12 +222,14 @@
       const titulo = document.getElementById('songTitle').value.trim();
       const letra = document.getElementById('songText').value.trim();
       if (titulo && letra) {
-        alabanzas.push({ id: Date.now().toString(), titulo, letra });
-        renderAlabanzas(); // Refresca la lista
+        const nueva = { id: Date.now().toString(), titulo, letra };
+        alabanzas.push(nueva);
+        renderAlabanzas(nueva.id); // Refresca la lista y selecciona la nueva
         document.getElementById('songTitle').value = '';
         document.getElementById('songText').value = '';
         document.getElementById('addForm').style.display = 'none';
         mostrarMensajeExito();
+        mostrarLetraAlabanza(nueva.id);
       }
     }
 
