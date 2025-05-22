@@ -26,11 +26,13 @@ const addForm = document.getElementById("addForm");
 let allSongs = {};
 
 function renderSong(song) {
+  // Lee el campo correcto (letra o text)
+  const letra = song.text || song.letra || "";
   display.innerHTML = `
     <div id="songTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
     <div id="songText" style="white-space:pre-line;"></div>
   `;
-  document.getElementById('songText').textContent = song.text; // <-- CAMBIA a song.letra si usas 'letra'
+  document.getElementById('songText').textContent = letra;
   ajustarFuenteLetra();
 }
 
@@ -101,10 +103,10 @@ window.showAddForm = () => {
 
 window.addSong = () => {
   const title = document.getElementById("songTitle").value.trim();
-  const text = document.getElementById("songText").value.trim();
-  if (!title || !text) return alert("Completa todos los campos.");
+  const letra = document.getElementById("songText").value.trim();
+  if (!title || !letra) return alert("Completa todos los campos.");
   const key = title.toLowerCase().replace(/\s+/g, "_");
-  set(ref(db, 'songsMusico/' + key), { title, text }); // <-- Usa 'letra' si prefieres ese campo
+  set(ref(db, 'songsMusico/' + key), { title, letra });
   document.getElementById("songTitle").value = "";
   document.getElementById("songText").value = "";
   addForm.style.display = 'none';
