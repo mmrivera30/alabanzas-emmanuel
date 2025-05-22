@@ -1,11 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><title>Pantalla Pública Cantante</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pantalla Cantante</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefefe;
+      background-image: url('https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png');
+      background-repeat: no-repeat;
+      background-size: 30%;
+      background-position: center center;
+      background-attachment: fixed;
+      color: #313293;
+      padding: 0.8em;
+      font-size: 12px;
+    }
+    select, button, textarea, input {
+      width: 100%;
+      font-size: 12px;
+      margin: 5px 0;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #9a6326;
+    }
+    .chord { color: #9a6326; font-weight: bold; }
+    pre { white-space: pre-wrap; font-size: 12px; line-height: 1.2em; }
+    .admin { display: none; margin-top: 15px; }
+    #display {
+      margin-top: 15px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    }
+    a.button, .btn-back {
+      display: block;
+      margin: 8px auto;
+      padding: 7px 14px;
+      background-color: #313293;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 12px;
+      text-align: center;
+      max-width: 230px;
+    }
+    a.button:hover, .btn-back:hover {
+      background-color: #9a6326;
+    }
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 11px;
+      color: #888;
+    }
+  </style>
+</head>
 <body>
-<h1>Pantalla Pública Cantante</h1>
-<div id="display">Cargando contenido...</div>
-<a href="index.html">⬅ Volver al inicio</a>
-<footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
-<script type="module" src="./scripts/pantalla-cantante.js"></script>
+  
+<div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+  <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png" alt="Logo" style="width: 36px; height: auto;" />
+  <h1 style="margin: 0; font-size: 18px;">Proyección Cantante</h1>
+</div>
+
+  
+  <div id='display'>Cargando alabanza...</div>
+  
+  <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
+  <script type="module" src="./scripts/pantalla-cantante.js"></script>
 </body>
 </html>
