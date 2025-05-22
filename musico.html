@@ -41,6 +41,9 @@
       border: 1px solid #9a6326;
       box-sizing: border-box;
     }
+    #searchAlabanza {
+      margin-bottom: 2px;
+    }
     .chord { color: #9a6326; font-weight: bold; }
     pre { white-space: pre-wrap; font-size: 13px; line-height: 1.4em; }
     .admin { display: none; margin-top: 18px; }
@@ -98,7 +101,6 @@
       width: 40px;
       margin-right: 8px;
     }
-    /* Responsive adjustments */
     @media (max-width: 900px) {
       #display { max-width: 99vw; padding: 14px 4vw; font-size: 13px; }
       select, button, textarea, input { font-size: 13px; }
@@ -125,7 +127,7 @@
     <input type="text" id="searchAlabanza" placeholder="Buscar alabanza...">
     <select id="songSelectorAdmin">
       <option value="">Selecciona una alabanza</option>
-      <!-- Opciones dinámicas aquí -->
+      <!-- Opciones dinámicas por JS -->
     </select>
     <button onclick="showAddForm()">Agregar nueva alabanza</button>
     <div id="addForm" style="display:none;">
@@ -139,6 +141,59 @@
   
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
+  <script>
+    // Simulación de tu base de datos local de alabanzas
+    const alabanzas = [
+      { id: '1', titulo: 'Grande es Jehová' },
+      { id: '2', titulo: 'Alabad a Jehová' },
+      { id: '3', titulo: 'Digno es el Señor' },
+      { id: '4', titulo: 'Cristo vive' },
+      { id: '5', titulo: 'Solo en Jesús' }
+      // ...agrega aquí más alabanzas
+    ];
+
+    function renderAlabanzas(filtro = '') {
+      const select = document.getElementById('songSelectorAdmin');
+      select.innerHTML = '<option value="">Selecciona una alabanza</option>';
+      alabanzas
+        .filter(a => a.titulo.toLowerCase().includes(filtro.toLowerCase()))
+        .forEach(a => {
+          const opt = document.createElement('option');
+          opt.value = a.id;
+          opt.textContent = a.titulo;
+          select.appendChild(opt);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAlabanzas();
+      document.getElementById('searchAlabanza').addEventListener('input', function() {
+        renderAlabanzas(this.value);
+      });
+    });
+
+    // Aquí puedes agregar tu lógica de login y mostrar panel admin
+
+    function login() {
+      document.getElementById('adminPanel').style.display = "block";
+      document.getElementById('loginBtn').style.display = "none";
+    }
+
+    function showAddForm() {
+      document.getElementById('addForm').style.display = 'block';
+    }
+
+    function addSong() {
+      const titulo = document.getElementById('songTitle').value.trim();
+      if (titulo) {
+        alabanzas.push({ id: Date.now().toString(), titulo });
+        renderAlabanzas(); // Refresca la lista
+        document.getElementById('songTitle').value = '';
+        document.getElementById('songText').value = '';
+        document.getElementById('addForm').style.display = 'none';
+      }
+    }
+  </script>
   <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>
