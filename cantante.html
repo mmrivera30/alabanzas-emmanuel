@@ -1,11 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><title>Administrador Cantante</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Administrador Cantante</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefefe;
+      color: #313293;
+      padding: 1.5em;
+      font-size: 15px;
+    }
+    h1 { text-align: center; color: #313293; font-size: 22px; }
+    select, button, textarea, input {
+      width: 100%;
+      font-size: 14px;
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #9a6326;
+    }
+    .chord { color: #9a6326; font-weight: bold; }
+    pre { white-space: pre-wrap; font-size: 14px; line-height: 1.3em; }
+    .admin { display: none; margin-top: 20px; }
+    #display {
+      margin-top: 20px;
+      padding: 12px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    a.button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px 16px;
+      background-color: #313293;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      text-align: center;
+    }
+    a.button:hover {
+      background-color: #9a6326;
+    }
+    .logo-fixed {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 100px;
+      opacity: 0.85;
+      z-index: 10;
+    }
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+    }
+  </style>
+</head>
 <body>
-<h1>Administrador Cantante</h1>
-<div id="display">Cargando contenido...</div>
-<a href="index.html">⬅ Volver al inicio</a>
-<footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
-<script type="module" src="./scripts/cantante.js"></script>
+  <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png" class="logo-fixed" alt="Logo" />
+  <h1>Vista del Cantante</h1>
+  
+<button id="loginBtn" onclick="login()">Iniciar sesión como cantante</button>
+<div id="adminPanel" class="admin">
+  <select id="songSelectorAdmin">
+    <option value="">Selecciona una alabanza</option>
+  </select>
+</div>
+
+  <div id='display'>Cargando alabanza...</div>
+  
+  <script type="module" src="./scripts/cantante.js"></script>
 </body>
 </html>
