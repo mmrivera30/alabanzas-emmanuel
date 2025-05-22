@@ -27,14 +27,34 @@ const addForm = document.getElementById("addForm");
 
 let allSongs = {};
 
+function ajustarFuenteDisplay() {
+  // Ajusta el tamaño de fuente para que todo el texto quepa en #display
+  let fontSize = 32; // tamaño inicial grande
+  display.style.fontSize = fontSize + "px";
+  // Considera si tiene texto (puede ser innerText o textContent según el contenido)
+  if (
+    (!display.textContent || !display.textContent.trim()) &&
+    (!display.innerText || !display.innerText.trim())
+  ) return;
+  // Bucle: reduce tamaño hasta que no haya overflow (desborde)
+  while (
+    (display.scrollHeight > display.clientHeight || display.scrollWidth > display.clientWidth)
+    && fontSize > 10
+  ) {
+    fontSize -= 1;
+    display.style.fontSize = fontSize + "px";
+  }
+}
+
 function renderSong(song) {
   const lines = song.text.split("\n");
-  let html = `<strong>${song.title}</strong><br><br><pre>`;
+  let html = `<strong>${song.title}</strong><br><br><pre style="margin:0; font-family:inherit;">`;
   for (const line of lines) {
     html += line + "\n";
   }
   html += "</pre>";
   display.innerHTML = html;
+  ajustarFuenteDisplay(); // Ajusta la fuente cada vez que se renderiza
 }
 
 function loadSongs() {
@@ -57,6 +77,9 @@ songSelector?.addEventListener('change', () => {
     const song = allSongs[key];
     set(ref(db, 'currentSongMusico'), song);
     renderSong(song);
+  } else {
+    display.innerHTML = "";
+    ajustarFuenteDisplay();
   }
 });
 
@@ -92,3 +115,6 @@ window.addSong = () => {
   document.getElementById("songText").value = "";
   addForm.style.display = 'none';
 };
+
+// Ajusta la fuente si se redimensiona la ventana
+window.addEventListener('resize', ajustarFuenteDisplay);
