@@ -41,6 +41,8 @@
       border: 1px solid #9a6326;
       box-sizing: border-box;
     }
+    .chord { color: #9a6326; font-weight: bold; }
+    pre { white-space: pre-wrap; font-size: 13px; line-height: 1.4em; }
     .admin { display: none; margin-top: 18px; }
     #display {
       margin: 22px auto 0 auto;
@@ -49,7 +51,7 @@
       color: #313293;
       border-radius: 16px;
       box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
-      font-size: 22px;
+      font-size: 13px;
       min-height: 120px;
       max-width: 700px;
       width: 98vw;
@@ -60,24 +62,6 @@
       word-break: break-word;
       overflow-x: hidden;
       overflow-wrap: break-word;
-      transition: font-size 0.2s;
-    }
-    #successMessage {
-      display: none;
-      background: #4bb543;
-      color: #fff;
-      border-radius: 8px;
-      padding: 10px 14px;
-      text-align: center;
-      margin: 10px auto 0 auto;
-      max-width: 320px;
-      font-size: 14px;
-      box-shadow: 0 2px 8px #2223a322;
-      animation: fadeIn 0.2s;
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(-10px);}
-      100% { opacity: 1; transform: translateY(0);}
     }
     a.button, .btn-back {
       display: block;
@@ -114,18 +98,19 @@
       width: 40px;
       margin-right: 8px;
     }
+    /* Responsive adjustments */
     @media (max-width: 900px) {
-      #display { max-width: 99vw; padding: 14px 4vw; font-size: 22px; }
+      #display { max-width: 99vw; padding: 14px 4vw; font-size: 13px; }
       select, button, textarea, input { font-size: 13px; }
     }
     @media (max-width: 700px) {
       h1 { font-size: 15px; }
-      #display { padding: 8px 2vw; font-size: 20px; }
+      #display { padding: 8px 2vw; font-size: 13px; }
       select, button, textarea, input { font-size: 13px; }
       a.button, .btn-back { max-width: 99vw; }
     }
     @media (max-width: 500px) {
-      #display { padding: 4px 1vw; font-size: 16px; }
+      #display { padding: 4px 1vw; font-size: 12px; }
       select, button, textarea, input { font-size: 12px; }
       h1 { font-size: 14px; }
     }
@@ -137,9 +122,10 @@
   
   <button id="loginBtn" onclick="login()">Iniciar sesión como músico</button>
   <div id="adminPanel" class="admin">
+    <input type="text" id="searchAlabanza" placeholder="Buscar alabanza...">
     <select id="songSelectorAdmin">
       <option value="">Selecciona una alabanza</option>
-      <!-- Opciones dinámicas por JS -->
+      <!-- Opciones dinámicas aquí -->
     </select>
     <button onclick="showAddForm()">Agregar nueva alabanza</button>
     <div id="addForm" style="display:none;">
@@ -149,97 +135,10 @@
     </div>
   </div>
 
-  <div id="successMessage">¡Alabanza guardada correctamente!</div>
   <div id='display'>Cargando alabanza...</div>
   
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
-  <script>
-    // Simulación de tu base de datos local de alabanzas con letra
-    const alabanzas = [
-      { id: '1', titulo: 'Grande es Jehová', letra: 'Grande es Jehová,\ny digno de suprema alabanza.' },
-      { id: '2', titulo: 'Alabad a Jehová', letra: 'Alabad a Jehová,\nnaciones todas; pueblos todos, alabadle.' },
-      { id: '3', titulo: 'Digno es el Señor', letra: 'Digno es el Señor,\nde recibir la gloria y el honor.' },
-      { id: '4', titulo: 'Cristo vive', letra: 'Cristo vive,\nÉl es nuestro Rey.' },
-      { id: '5', titulo: 'Solo en Jesús', letra: 'Solo en Jesús,\nmi esperanza está.' }
-      // ...agrega aquí más alabanzas
-    ];
-
-    function renderAlabanzas(selectedId = "") {
-      const select = document.getElementById('songSelectorAdmin');
-      select.innerHTML = '<option value="">Selecciona una alabanza</option>';
-      alabanzas.forEach(a => {
-        const opt = document.createElement('option');
-        opt.value = a.id;
-        opt.textContent = a.titulo;
-        if (a.id === selectedId) opt.selected = true;
-        select.appendChild(opt);
-      });
-    }
-
-    function mostrarLetraAlabanza(id) {
-      const alabanza = alabanzas.find(a => a.id === id);
-      document.getElementById('display').textContent = alabanza ? alabanza.letra : '';
-      ajustarFuenteDisplay();
-    }
-
-    // Ajuste automático de fuente en #display
-    function ajustarFuenteDisplay() {
-      const display = document.getElementById('display');
-      let fontSize = 22;
-      display.style.fontSize = fontSize + 'px';
-      // Permite el ajuste solo si hay texto
-      if (!display.textContent.trim()) return;
-      // Bucle: reduce tamaño hasta que no haya overflow (desborde)
-      while (
-        (display.scrollHeight > display.clientHeight || display.scrollWidth > display.clientWidth)
-        && fontSize > 10
-      ) {
-        fontSize -= 1;
-        display.style.fontSize = fontSize + 'px';
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderAlabanzas();
-      document.getElementById('songSelectorAdmin').addEventListener('change', function() {
-        mostrarLetraAlabanza(this.value);
-      });
-    });
-
-    // Aquí puedes agregar tu lógica de login y mostrar panel admin
-
-    function login() {
-      document.getElementById('adminPanel').style.display = "block";
-      document.getElementById('loginBtn').style.display = "none";
-    }
-
-    function showAddForm() {
-      document.getElementById('addForm').style.display = 'block';
-    }
-
-    function addSong() {
-      const titulo = document.getElementById('songTitle').value.trim();
-      const letra = document.getElementById('songText').value.trim();
-      if (titulo && letra) {
-        const nueva = { id: Date.now().toString(), titulo, letra };
-        alabanzas.push(nueva);
-        renderAlabanzas(nueva.id); // Refresca la lista y selecciona la nueva
-        document.getElementById('songTitle').value = '';
-        document.getElementById('songText').value = '';
-        document.getElementById('addForm').style.display = 'none';
-        mostrarMensajeExito();
-        mostrarLetraAlabanza(nueva.id);
-      }
-    }
-
-    function mostrarMensajeExito() {
-      const msg = document.getElementById('successMessage');
-      msg.style.display = "block";
-      setTimeout(() => {
-        msg.style.display = "none";
-      }, 2000);
-    }
-  </script>
+  <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>
