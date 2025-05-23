@@ -8,58 +8,52 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: black;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
       width: 100vw;
       height: 100vh;
+      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
       overflow: hidden;
     }
 
     header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
+      text-align: center;
+      margin-top: 10px;
     }
 
-    header img {
+    .logo-inline {
       height: 36px;
-      margin-right: 8px;
+      margin-bottom: 4px;
     }
 
-    header h1 {
+    h1 {
+      text-align: center;
       font-size: 18px;
-      margin: 0;
-      color: #fff;
-      font-weight: 500;
+      margin: 10px 0 12px;
     }
 
     #display {
-      padding: 2vh 4vw;
-      text-align: center;
-      white-space: pre-wrap;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      font-size: 20px;
-      height: calc(100vh - 60px);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
+      padding: 10px 12px;
+      width: 100vw;
+      height: 75vh;
+      overflow: hidden;
     }
 
     #displayTitle {
       font-weight: bold;
-      font-size: 1.4em;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      font-size: 16px;
+      text-align: center;
     }
 
     #displayText {
-      font-size: 16px;
-      width: 100%;
-      max-width: 960px;
-      text-align: left;
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      margin: 0 auto;
+      width: 96vw;
+      color: #fff;
     }
   </style>
 </head>
@@ -67,15 +61,17 @@
 
   <header>
     <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png"
-         alt="Logo" />
-    <h1>Proyección</h1>
+         class="logo-inline" alt="Logo" />
   </header>
+
+  <h1>Proyección del Músico</h1>
 
   <div id="display">
     <div id="displayTitle">Cargando...</div>
-    <pre id="displayText">Esperando selección del músico...</pre>
+    <pre id="displayText">Esperando selección...</pre>
   </div>
 
   <script type="module" src="./scripts/pantalla-musico.js"></script>
 </body>
 </html>
+
