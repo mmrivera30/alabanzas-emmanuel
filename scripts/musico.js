@@ -21,7 +21,8 @@ const provider = new GoogleAuthProvider();
 const MUSICO_UIDS = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
 const songSelector = document.getElementById("songSelectorAdmin");
 const adminPanel = document.getElementById("adminPanel");
-const display = document.getElementById("display");
+const displayTitle = document.getElementById("displayTitle");
+const displayText = document.getElementById("displayText");
 const addForm = document.getElementById("addForm");
 const inputTitle = document.getElementById("songTitle");
 const inputText = document.getElementById("songText");
@@ -30,31 +31,23 @@ let allSongs = {};
 
 function renderSong(song) {
   const letra = song.text || "";
-  display.innerHTML = `
-    <div id="displayTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
-    <pre id="displayText" style="font-family:inherit; white-space:pre-wrap; margin:0; word-break:break-word; overflow-wrap:break-word;"></pre>
-  `;
-  const pre = document.getElementById('displayText');
-  if (pre) {
-    pre.textContent = letra;
-    ajustarFuenteLetra();
-  }
+  displayTitle.textContent = song.title || "";
+  displayText.textContent = letra;
+  ajustarFuenteLetra();
 }
 
 function ajustarFuenteLetra() {
-  const letraDiv = document.getElementById('displayText');
-  if (!letraDiv) return;
+  if (!displayText) return;
   let fontSize = 20;
-  letraDiv.style.fontSize = fontSize + 'px';
-  const displayBox = display.getBoundingClientRect();
-  const titleDiv = document.getElementById('displayTitle');
-  const titleHeight = titleDiv ? titleDiv.offsetHeight : 0;
+  displayText.style.fontSize = fontSize + 'px';
+  const displayBox = displayText.parentElement.getBoundingClientRect();
+  const titleHeight = displayTitle ? displayTitle.offsetHeight : 0;
   while (
-    (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width)
-    && fontSize > 8
+    (displayText.scrollHeight > (displayText.parentElement.clientHeight - titleHeight - 10) ||
+      displayText.scrollWidth > displayBox.width) && fontSize > 8
   ) {
     fontSize -= 1;
-    letraDiv.style.fontSize = fontSize + "px";
+    displayText.style.fontSize = fontSize + "px";
   }
 }
 
@@ -79,7 +72,8 @@ songSelector?.addEventListener('change', () => {
     set(ref(db, 'currentSongMusico'), { title, text });
     renderSong({ title, text });
   } else {
-    display.innerHTML = "";
+    displayTitle.textContent = "";
+    displayText.textContent = "";
   }
 });
 
@@ -120,4 +114,3 @@ window.addSong = () => {
 };
 
 window.addEventListener('resize', ajustarFuenteLetra);
-
