@@ -3,76 +3,112 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pantalla Músico</title>
+  <title>Lista de Alabanzas</title>
   <style>
     html, body {
       margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
+      padding: 1em;
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       color: white;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      text-align: center;
-      padding: 8px 0;
-    }
-
-    .logo-inline {
-      height: 36px;
-      margin-bottom: 4px;
     }
 
     h1 {
-      font-size: 16px;
-      margin: 4px 0 10px;
-    }
-
-    #display {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 8px;
-      overflow-y: auto;
-    }
-
-    #displayTitle {
-      font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 10px;
       text-align: center;
+      font-size: 18px;
+      margin: 10px 0 12px;
     }
 
-    #displayText {
-      font-size: 12px;
+    .alabanza-card {
+      background: #fff;
+      color: #313293;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 12px auto;
+      box-shadow: 0 2px 8px #00000033;
+      max-width: 700px;
+    }
+
+    .alabanza-card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .alabanza-card pre {
       white-space: pre-wrap;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      width: 96vw;
+      font-size: 13px;
+      margin: 8px 0;
+      color: #444;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-row button {
+      flex: 1;
+      padding: 6px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-edit { background-color: #313293; color: #fff; }
+    .btn-edit:hover { background-color: #2b2c80; }
+
+    .btn-delete { background-color: #c62828; color: #fff; }
+    .btn-delete:hover { background-color: #a51212; }
+
+    .btn-back, .btn-service {
+      display: block;
+      margin: 14px auto;
+      padding: 10px 16px;
+      background-color: #313293;
       color: #fff;
-      text-align: left;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      max-width: 300px;
+      text-align: center;
+      box-shadow: 0 2px 8px #2223a322;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-back:hover, .btn-service:hover {
+      background-color: #9a6326;
+    }
+
+    #servicioDia {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    #servicioDia input[type="date"] {
+      padding: 6px;
+      font-size: 14px;
+      border-radius: 6px;
+      margin-right: 8px;
+      border: none;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png"
-         class="logo-inline" alt="Logo" />
-    <h1>Proyección del Músico</h1>
-  </header>
+  <h1>Lista de Alabanzas</h1>
 
-  <div id="display">
-    <div id="displayTitle">Cargando...</div>
-    <pre id="displayText">Esperando selección...</pre>
+  <div id="servicioDia">
+    <input type="date" id="fechaServicio" />
+    <button class="btn-service" onclick="agregarAlabanzaADia()">Agregar alabanza al servicio</button>
   </div>
 
-  <script type="module" src="./scripts/pantalla-musico.js"></script>
+  <div id="listaAlabanzas">Cargando...</div>
+
+  <a href="index.html" class="btn-back">⬅ Volver al inicio</a>
+
+  <script type="module" src="./scripts/alabanzas.js"></script>
 </body>
 </html>
