@@ -21,7 +21,6 @@ const MUSICO_UIDS = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
 const display = document.getElementById("display");
 const displayTitle = document.getElementById("displayTitle");
 const displayText = document.getElementById("displayText");
-const editDeleteButtons = document.getElementById("editDeleteButtons");
 const songSelector = document.getElementById("songSelectorAdmin");
 const addForm = document.getElementById("addForm");
 const inputTitle = document.getElementById("songTitle");
@@ -31,7 +30,6 @@ const adminPanel = document.getElementById("adminPanel");
 let allSongs = {};
 let currentKey = null;
 
-// Resaltar acordes en el texto
 function highlightChords(text) {
   const chordRegex = /\[([A-G#bmajmin7]+)\]/g; // Identificar acordes como [G], [Am]
   return text.replace(chordRegex, '<span class="chord">[$1]</span>');
@@ -41,21 +39,20 @@ function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
   displayText.innerHTML = highlightChords(song.text || "");
-  editDeleteButtons.style.display = 'flex';
   ajustarFuenteLetra();
 }
 
 function ajustarFuenteLetra() {
   const letraDiv = displayText;
   if (!letraDiv) return;
-  let fontSize = 14;
-  letraDiv.style.fontSize = fontSize + 'px';
+  let fontSize = 14; // Tamaño inicial de la fuente
+  letraDiv.style.fontSize = fontSize + "px";
   const displayBox = display.getBoundingClientRect();
   const titleHeight = displayTitle.offsetHeight;
 
   while (
-    (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width)
-    && fontSize > 8
+    (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width) &&
+    fontSize > 8
   ) {
     fontSize--;
     letraDiv.style.fontSize = fontSize + "px";
@@ -63,7 +60,7 @@ function ajustarFuenteLetra() {
 }
 
 function loadSongs() {
-  onValue(ref(db, 'songsMusico'), snapshot => {
+  onValue(ref(db, "songsMusico"), (snapshot) => {
     allSongs = snapshot.val() || {};
     songSelector.innerHTML = '<option value="">Selecciona una alabanza</option>';
     Object.entries(allSongs).forEach(([key, song]) => {
@@ -72,32 +69,35 @@ function loadSongs() {
       opt.textContent = song.title;
       songSelector.appendChild(opt);
     });
+  }, (error) => {
+    console.error("Error al cargar las alabanzas:", error);
+    alert("No se pudieron cargar las alabanzas. Verifica la conexión a Firebase.");
   });
 }
 
-songSelector?.addEventListener('change', () => {
+songSelector?.addEventListener("change", () => {
   const key = songSelector.value;
   if (key && allSongs[key]) {
     const { title, text } = allSongs[key];
-    set(ref(db, 'currentSongMusico'), { title, text });
+    set(ref(db, "currentSongMusico"), { title, text });
     renderSong({ title, text }, key);
   } else {
     displayTitle.textContent = "";
     displayText.textContent = "Selecciona una alabanza.";
-    editDeleteButtons.style.display = 'none';
   }
 });
 
 window.login = () => {
-  signInWithPopup(auth, provider)
-    .catch(error => alert("Error al iniciar sesión: " + error.message));
+  signInWithPopup(auth, provider).catch((error) =>
+    alert("Error al iniciar sesión: " + error.message)
+  );
 };
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, (user) => {
   const loginButton = document.getElementById("loginButton");
   if (user) {
     if (MUSICO_UIDS.includes(user.uid)) {
-      adminPanel.style.display = 'block';
+      adminPanel.style.display = "block";
       loadSongs();
     } else {
       alert("Acceso restringido al músico.");
@@ -109,7 +109,7 @@ onAuthStateChanged(auth, user => {
 });
 
 window.showAddForm = () => {
-  addForm.style.display = 'block';
+  addForm.style.display = "block";
 };
 
 window.addSong = () => {
@@ -117,52 +117,13 @@ window.addSong = () => {
   const text = inputText.value.trim();
   if (!title || !text) return alert("Completa todos los campos.");
   const key = title.toLowerCase().replace(/\s+/g, "_");
-  set(ref(db, 'songsMusico/' + key), { title, text }).then(() => {
+  set(ref(db, "songsMusico/" + key), { title, text }).then(() => {
     inputTitle.value = "";
     inputText.value = "";
-    addForm.style.display = 'none';
+    addForm.style.display = "none";
     renderSong({ title, text }, key);
     songSelector.value = key;
   });
 };
 
-window.editarCancion = () => {
-  if (!currentKey || !allSongs[currentKey]) return;
-  const song = allSongs[currentKey];
-  inputTitle.value = song.title;
-  inputText.value = song.text;
-  addForm.style.display = 'block';
-};
-
-window.eliminarCancion = () => {
-  if (!currentKey) return;
-  if (confirm("¿Estás seguro de eliminar esta alabanza?")) {
-    remove(ref(db, 'songsMusico/' + currentKey)).then(() => {
-      displayTitle.textContent = "";
-      displayText.textContent = "Alabanza eliminada.";
-      editDeleteButtons.style.display = 'none';
-      songSelector.value = "";
-    });
-  }
-};
-
-window.showSongList = () => {
-  const songList = Object.entries(allSongs).map(([key, song]) => `
-    <div>
-      ${song.title}
-      <button onclick="moveUp('${key}')">⬆</button>
-      <button onclick="moveDown('${key}')">⬇</button>
-    </div>
-  `).join("");
-  displayText.innerHTML = songList || "No hay alabanzas.";
-};
-
-window.moveUp = (key) => {
-  console.log(`Mover ${key} hacia arriba`);
-};
-
-window.moveDown = (key) => {
-  console.log(`Mover ${key} hacia abajo`);
-};
-
-window.addEventListener('resize', ajustarFuenteLetra);
+window.addEventListener("resize", ajustarFuenteLetra);
