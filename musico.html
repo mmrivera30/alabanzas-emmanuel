@@ -40,26 +40,44 @@
       box-sizing: border-box;
     }
     .chord { color: #9a6326; font-weight: bold; }
-    pre { white-space: pre-wrap; font-size: 13px; line-height: 1.4em; }
     .admin { display: none; margin-top: 18px; }
     #display {
       margin: 22px auto 0 auto;
-      padding: 18px 12px;
       background: #fff;
       color: #313293;
       border-radius: 16px;
       box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
-      font-size: 13px;
       min-height: 120px;
       max-width: 700px;
       width: 98vw;
       font-family: inherit;
-      white-space: pre-wrap;
-      line-height: 1.4;
       text-align: left;
       word-break: break-word;
-      overflow-x: hidden;
+      overflow-x: auto;
       overflow-wrap: break-word;
+      box-sizing: border-box;
+      padding: 0;
+    }
+    #displayTitle {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      padding: 18px 12px 0 12px;
+      word-break: break-word;
+    }
+    #displayText {
+      margin: 0;
+      padding: 8px 12px 18px 12px;
+      font-size: 13px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      background: transparent;
+      color: inherit;
+      border-radius: inherit;
+      width: 100%;
+      box-sizing: border-box;
+      font-family: inherit;
+      overflow-x: auto;
     }
     a.button, .btn-back {
       display: block;
@@ -97,17 +115,17 @@
       margin-right: 8px;
     }
     @media (max-width: 900px) {
-      #display { max-width: 99vw; padding: 14px 4vw; font-size: 13px; }
+      #display { max-width: 99vw; }
       select, button, textarea, input { font-size: 13px; }
     }
     @media (max-width: 700px) {
       h1 { font-size: 15px; }
-      #display { padding: 8px 2vw; font-size: 13px; }
+      #displayText { font-size: 13px; }
       select, button, textarea, input { font-size: 13px; }
       a.button, .btn-back { max-width: 99vw; }
     }
     @media (max-width: 500px) {
-      #display { padding: 4px 1vw; font-size: 12px; }
+      #displayText { font-size: 12px; }
       select, button, textarea, input { font-size: 12px; }
       h1 { font-size: 14px; }
     }
@@ -129,7 +147,10 @@
     </div>
   </div>
 
-  <div id='display'>Cargando alabanza...</div>
+  <div id='display'>
+    <div id="displayTitle"></div>
+    <pre id="displayText">Cargando alabanza...</pre>
+  </div>
   
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
