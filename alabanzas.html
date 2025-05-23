@@ -29,21 +29,21 @@
       max-width: 700px;
     }
 
-    .alabanza-card h3 {
-      margin: 0 0 6px;
-      font-size: 16px;
+    .alabanza-card label {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
     }
 
-    .alabanza-card pre {
-      white-space: pre-wrap;
-      font-size: 13px;
-      margin: 8px 0;
-      color: #444;
+    .alabanza-card input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
     }
 
     .btn-row {
       display: flex;
       gap: 10px;
+      margin-top: 10px;
     }
 
     .btn-row button {
@@ -61,7 +61,7 @@
     .btn-delete { background-color: #c62828; color: #fff; }
     .btn-delete:hover { background-color: #a51212; }
 
-    .btn-back, .btn-service {
+    .btn-back, .btn-service, .btn-login {
       display: block;
       margin: 14px auto;
       padding: 10px 16px;
@@ -78,7 +78,7 @@
       cursor: pointer;
     }
 
-    .btn-back:hover, .btn-service:hover {
+    .btn-back:hover, .btn-service:hover, .btn-login:hover {
       background-color: #9a6326;
     }
 
@@ -100,9 +100,11 @@
 
   <h1>Lista de Alabanzas</h1>
 
+  <button class="btn-login" onclick="login()">Iniciar sesión</button>
+
   <div id="servicioDia">
     <input type="date" id="fechaServicio" />
-    <button class="btn-service" onclick="agregarAlabanzaADia()">Agregar alabanza al servicio</button>
+    <button class="btn-service" onclick="agregarAlabanzaADia()">Agregar alabanzas al servicio</button>
   </div>
 
   <div id="listaAlabanzas">Cargando...</div>
