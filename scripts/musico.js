@@ -31,23 +31,26 @@ let allSongs = {};
 function renderSong(song) {
   const letra = song.text || "";
   display.innerHTML = `
-    <div id="displayTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
-    <pre id="displayText" style="font-family:inherit; white-space:pre-wrap; margin:0; overflow-wrap:break-word;">${letra}</pre>
+    <div id="songTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
+    <pre id="songText" style="font-family:inherit; white-space:pre-wrap; margin:0; word-break:break-word; overflow-wrap:break-word;"></pre>
   `;
+  const pre = document.getElementById('songText');
+  pre.textContent = letra;
   ajustarFuenteLetra();
 }
 
 function ajustarFuenteLetra() {
-  const letraDiv = document.getElementById('displayText');
+  const letraDiv = document.getElementById('songText');
   if (!letraDiv) return;
-  let fontSize = 32;
+  let fontSize = 24; // inicia más pequeño
   letraDiv.style.fontSize = fontSize + 'px';
   const displayBox = display.getBoundingClientRect();
-  const titleDiv = document.getElementById('displayTitle');
+  const titleDiv = document.getElementById('songTitle');
   const titleHeight = titleDiv ? titleDiv.offsetHeight : 0;
+
   while (
     (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width)
-    && fontSize > 10
+    && fontSize > 8
   ) {
     fontSize -= 1;
     letraDiv.style.fontSize = fontSize + "px";
@@ -116,4 +119,5 @@ window.addSong = () => {
 };
 
 window.addEventListener('resize', ajustarFuenteLetra);
+
 
