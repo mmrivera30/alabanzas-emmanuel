@@ -20,7 +20,6 @@ const provider = new GoogleAuthProvider();
 const UID_AUTORIZADO = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
 let todasLasAlabanzas = {};
 const lista = document.getElementById("listaAlabanzas");
-const fechaInput = document.getElementById("fechaServicio");
 
 window.login = () => {
   signInWithPopup(auth, provider).catch(e => {
@@ -44,16 +43,20 @@ function cargarAlabanzas() {
   });
 }
 
+function filtrarSoloLetras(texto) {
+  // Eliminar acordes entre corchetes como [G], [Am]
+  return texto.replace(/\[.*?\]/g, "").trim();
+}
+
 function mostrarAlabanzas() {
   lista.innerHTML = "";
-  Object.entries(todasLasAlabanzas).forEach(([key, { title }]) => {
+  Object.entries(todasLasAlabanzas).forEach(([key, { title, text }]) => {
+    const letraSinAcordes = filtrarSoloLetras(text || "");
     const card = document.createElement("div");
     card.className = "alabanza-card";
     card.innerHTML = `
-      <label>
-        <input type="checkbox" class="chk-servicio" value="${key}" />
-        <strong>${title}</strong>
-      </label>
+      <strong>${title}</strong>
+      <p>${letraSinAcordes}</p>
       <div class="btn-row">
         <button class="btn-edit" onclick="editar('${key}')">✏️ Editar</button>
         <button class="btn-delete" onclick="eliminar('${key}')">🗑️ Eliminar</button>
@@ -78,20 +81,3 @@ window.eliminar = (key) => {
     remove(ref(db, 'songsMusico/' + key));
   }
 };
-
-window.agregarAlabanzaADia = () => {
-  const fecha = fechaInput.value;
-  if (!fecha) return alert("Selecciona una fecha.");
-
-  const seleccionadas = document.querySelectorAll(".chk-servicio:checked");
-  if (!seleccionadas.length) return alert("Selecciona al menos una alabanza.");
-
-  seleccionadas.forEach(chk => {
-    const key = chk.value;
-    const alabanza = todasLasAlabanzas[key];
-    set(ref(db, `songsPorDia/${fecha}/${key}`), alabanza);
-  });
-
-  alert("Alabanzas agregadas al servicio del día.");
-};
-
