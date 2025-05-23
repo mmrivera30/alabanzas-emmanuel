@@ -10,15 +10,16 @@
       padding: 0;
       width: 100vw;
       height: 100vh;
-      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       color: white;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
       text-align: center;
-      margin-top: 10px;
+      padding: 8px 0;
     }
 
     .logo-inline {
@@ -27,33 +28,35 @@
     }
 
     h1 {
-      text-align: center;
-      font-size: 18px;
-      margin: 10px 0 12px;
+      font-size: 16px;
+      margin: 4px 0 10px;
     }
 
     #display {
-      padding: 10px 12px;
-      width: 100vw;
-      height: 75vh;
-      overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 8px;
+      overflow-y: auto;
     }
 
     #displayTitle {
       font-weight: bold;
-      margin-bottom: 8px;
       font-size: 16px;
+      margin-bottom: 10px;
       text-align: center;
     }
 
     #displayText {
-      font-size: 10px;
+      font-size: 12px;
       white-space: pre-wrap;
       word-break: break-word;
       overflow-wrap: break-word;
-      margin: 0 auto;
       width: 96vw;
       color: #fff;
+      text-align: left;
     }
   </style>
 </head>
@@ -62,9 +65,8 @@
   <header>
     <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png"
          class="logo-inline" alt="Logo" />
+    <h1>Proyección del Músico</h1>
   </header>
-
-  <h1>Proyección del Músico</h1>
 
   <div id="display">
     <div id="displayTitle">Cargando...</div>
