@@ -89,6 +89,7 @@ function abrirPopUpEditar(key, tipoEdicion) {
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', popUpHtml);
+  agregarEstilosPopUp();
 }
 
 function cerrarPopUp() {
@@ -131,6 +132,7 @@ function confirmarEliminar(key) {
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', opcionesHtml);
+  agregarEstilosPopUp();
 }
 
 function eliminar(key, tipoEliminacion) {
@@ -146,4 +148,43 @@ function eliminar(key, tipoEliminacion) {
   alert("Eliminación realizada correctamente.");
   cerrarPopUp();
   cargarAlabanzas();
+}
+
+function agregarEstilosPopUp() {
+  const estilo = document.createElement('style');
+  estilo.textContent = `
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .popup-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .popup-buttons button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background-color: #313293;
+      color: white;
+      cursor: pointer;
+    }
+    .popup-buttons button:hover {
+      background-color: #2b2c80;
+    }
+  `;
+  document.head.appendChild(estilo);
 }
