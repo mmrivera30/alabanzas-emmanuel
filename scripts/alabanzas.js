@@ -37,7 +37,7 @@ onAuthStateChanged(auth, user => {
 });
 
 function cargarAlabanzas() {
-  onValue(ref(db, 'songsMusico'), snapshot => {
+  onValue(ref(db, 'songsCantante'), snapshot => {
     todasLasAlabanzas = snapshot.val() || {};
     mostrarAlabanzas();
   });
@@ -56,9 +56,10 @@ function mostrarAlabanzas() {
     card.className = "alabanza-card";
     card.innerHTML = `
       <strong>${title}</strong>
-      <p>${letraSinAcordes}</p>
+      <p><strong>Con acordes:</strong> ${text || ""}</p>
+      <p><strong>Sin acordes:</strong> ${letraSinAcordes}</p>
       <div class="btn-row">
-        <button class="btn-edit" onclick="editar('${key}')">✏️ Editar</button>
+        <button class="btn-edit" onclick="mostrarFormularioEdicion('${key}')">✏️ Editar</button>
         <button class="btn-delete" onclick="eliminar('${key}')">🗑️ Eliminar</button>
       </div>
     `;
@@ -66,18 +67,45 @@ function mostrarAlabanzas() {
   });
 }
 
-window.editar = (key) => {
-  const nuevaLetra = prompt("Edita la letra:", todasLasAlabanzas[key].text);
-  if (nuevaLetra !== null) {
-    set(ref(db, 'songsMusico/' + key), {
-      title: todasLasAlabanzas[key].title,
-      text: nuevaLetra
-    });
-  }
-};
+function mostrarFormularioEdicion(key) {
+  const song = todasLasAlabanzas[key];
+  const formHtml = `
+    <div class="edit-form-container">
+      <h2>Editar Alabanza</h2>
+      <form id="editSongForm">
+        <label for="songTitle">Título</label>
+        <input type="text" id="songTitle" name="songTitle" value="${song.title}" required>
+
+        <label for="songText">Letra</label>
+        <textarea id="songText" name="songText" required>${song.text}</textarea>
+
+        <button type="button" onclick="guardarEdicion('${key}')">Guardar Cambios</button>
+        <button type="button" onclick="cancelarEdicion()">Cancelar</button>
+      </form>
+    </div>
+  `;
+  lista.innerHTML = formHtml; // Reemplaza el contenido de la lista con el formulario
+}
+
+function guardarEdicion(key) {
+  const title = document.getElementById("songTitle").value.trim();
+  const text = document.getElementById("songText").value.trim();
+  if (!title || !text) return alert("Completa todos los campos.");
+  set(ref(db, 'songsCantante/' + key), { title, text }).then(() => {
+    alert("Alabanza actualizada correctamente.");
+    cargarAlabanzas(); // Recargar la lista después de guardar
+  });
+}
+
+function cancelarEdicion() {
+  cargarAlabanzas(); // Recargar la lista sin guardar cambios
+}
 
 window.eliminar = (key) => {
   if (confirm("¿Seguro que deseas eliminar esta alabanza?")) {
-    remove(ref(db, 'songsMusico/' + key));
+    remove(ref(db, 'songsCantante/' + key)).then(() => {
+      alert("Alabanza eliminada correctamente.");
+      cargarAlabanzas(); // Recargar la lista después de eliminar
+    });
   }
 };
