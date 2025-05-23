@@ -52,7 +52,7 @@
       padding: 10px 12px;
       width: 100vw;
       height: 55vh;
-      overflow: hidden;
+      overflow: auto; /* Permite desplazamiento */
     }
 
     #displayTitle {
@@ -128,8 +128,7 @@
 
   <h1>Vista del Músico</h1>
 
-<button id="loginButton" onclick="login()">Iniciar sesión como músico</button>
-
+  <button id="loginButton" onclick="login()">Iniciar sesión como músico</button>
 
   <div id="adminPanel" class="admin">
     <select id="songSelectorAdmin">
@@ -160,5 +159,3 @@
   <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>
-
-
