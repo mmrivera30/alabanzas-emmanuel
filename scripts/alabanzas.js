@@ -19,19 +19,41 @@ const provider = new GoogleAuthProvider();
 
 const UID_AUTORIZADO = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
 let todasLasAlabanzas = {};
-let alabanzaSeleccionada = null;
-
 const lista = document.getElementById("listaAlabanzas");
 const fechaInput = document.getElementById("fechaServicio");
 
+window.login = () => {
+  signInWithPopup(auth, provider).catch(e => {
+    alert("Error al iniciar sesión: " + e.message);
+  });
+};
+
+onAuthStateChanged(auth, user => {
+  if (user?.uid === UID_AUTORIZADO) {
+    cargarAlabanzas();
+  } else {
+    alert("Acceso restringido.");
+    window.location.href = "index.html";
+  }
+});
+
+function cargarAlabanzas() {
+  onValue(ref(db, 'songsMusico'), snapshot => {
+    todasLasAlabanzas = snapshot.val() || {};
+    mostrarAlabanzas();
+  });
+}
+
 function mostrarAlabanzas() {
   lista.innerHTML = "";
-  Object.entries(todasLasAlabanzas).forEach(([key, { title, text }]) => {
+  Object.entries(todasLasAlabanzas).forEach(([key, { title }]) => {
     const card = document.createElement("div");
     card.className = "alabanza-card";
     card.innerHTML = `
-      <h3>${title}</h3>
-      <pre>${text}</pre>
+      <label>
+        <input type="checkbox" class="chk-servicio" value="${key}" />
+        <strong>${title}</strong>
+      </label>
       <div class="btn-row">
         <button class="btn-edit" onclick="editar('${key}')">✏️ Editar</button>
         <button class="btn-delete" onclick="eliminar('${key}')">🗑️ Eliminar</button>
@@ -41,15 +63,8 @@ function mostrarAlabanzas() {
   });
 }
 
-function cargarAlabanzas() {
-  onValue(ref(db, 'songsMusico'), snapshot => {
-    todasLasAlabanzas = snapshot.val() || {};
-    mostrarAlabanzas();
-  });
-}
-
 window.editar = (key) => {
-  const nuevaLetra = prompt("Edita el texto:", todasLasAlabanzas[key].text);
+  const nuevaLetra = prompt("Edita la letra:", todasLasAlabanzas[key].text);
   if (nuevaLetra !== null) {
     set(ref(db, 'songsMusico/' + key), {
       title: todasLasAlabanzas[key].title,
@@ -68,32 +83,15 @@ window.agregarAlabanzaADia = () => {
   const fecha = fechaInput.value;
   if (!fecha) return alert("Selecciona una fecha.");
 
-  const titulo = prompt("Escribe el TÍTULO EXACTO de la alabanza a agregar:");
-  const key = titulo?.toLowerCase().replace(/\s+/g, "_");
+  const seleccionadas = document.querySelectorAll(".chk-servicio:checked");
+  if (!seleccionadas.length) return alert("Selecciona al menos una alabanza.");
 
-  if (!key || !todasLasAlabanzas[key]) {
-    alert("No se encontró la alabanza con ese título.");
-    return;
-  }
+  seleccionadas.forEach(chk => {
+    const key = chk.value;
+    const alabanza = todasLasAlabanzas[key];
+    set(ref(db, `songsPorDia/${fecha}/${key}`), alabanza);
+  });
 
-  const alabanza = todasLasAlabanzas[key];
-  set(ref(db, `songsPorDia/${fecha}/${key}`), alabanza)
-    .then(() => alert("Alabanza agregada al servicio del día."))
-    .catch(err => alert("Error al guardar: " + err.message));
+  alert("Alabanzas agregadas al servicio del día.");
 };
 
-// Autenticación
-onAuthStateChanged(auth, user => {
-  if (user?.uid === UID_AUTORIZADO) {
-    cargarAlabanzas();
-  } else {
-    alert("Acceso restringido. No tienes permiso.");
-    window.location.href = "index.html";
-  }
-});
-
-if (!auth.currentUser) {
-  signInWithPopup(auth, provider).catch(e => {
-    alert("Error al iniciar sesión: " + e.message);
-  });
-}
