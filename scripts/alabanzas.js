@@ -88,7 +88,7 @@ function abrirPopUpEditar(key, tipoEdicion) {
           <label for="songTitle">Título</label>
           <input type="text" id="songTitle" value="${song.title}" required>
           <label for="songText">Texto</label>
-          <textarea id="songText" required>${textoInicial}</textarea>
+          <textarea id="songText" rows="10" required>${textoInicial}</textarea>
           <div class="popup-buttons">
             <button type="button" id="saveChanges">Guardar</button>
             <button type="button" id="cancelChanges">Cancelar</button>
@@ -131,10 +131,18 @@ function guardarEdicion(key, tipoEdicion) {
 }
 
 function confirmarEliminar(key) {
+  const song = todasLasAlabanzas[key];
+  const textoConAcordes = song.text || "";
+  const textoSinAcordes = filtrarSoloLetras(textoConAcordes);
+
   const opcionesHtml = `
     <div class="popup-overlay">
       <div class="popup-container">
         <h2>¿Qué deseas eliminar?</h2>
+        <p><strong>Con acordes:</strong></p>
+        <textarea readonly rows="5">${textoConAcordes}</textarea>
+        <p><strong>Sin acordes:</strong></p>
+        <textarea readonly rows="5">${textoSinAcordes}</textarea>
         <div class="popup-buttons">
           <button id="deleteLetras">Solo Letras</button>
           <button id="deleteAmbas">Letras y Acordes</button>
@@ -186,8 +194,12 @@ function agregarEstilosPopUp() {
       padding: 20px;
       border-radius: 8px;
       width: 90%;
-      max-width: 400px;
+      max-width: 500px;
       text-align: center;
+    }
+    .popup-container textarea {
+      width: 100%;
+      resize: none;
     }
     .popup-buttons button {
       margin: 10px;
