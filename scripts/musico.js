@@ -2,7 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/fireba
 import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBJEPsI0xrYHM5YdbeO58IgiJ1ocCg1nBg",
   authDomain: "alabanzasemmanuel2.firebaseapp.com",
@@ -43,7 +42,7 @@ function renderSong(song, key) {
 function ajustarFuenteLetra() {
   const letraDiv = displayText;
   if (!letraDiv) return;
-  let fontSize = 14; // Más pequeño desde el inicio
+  let fontSize = 14;
   letraDiv.style.fontSize = fontSize + 'px';
   const displayBox = display.getBoundingClientRect();
   const titleHeight = displayTitle.offsetHeight;
@@ -137,4 +136,5 @@ window.eliminarCancion = () => {
 };
 
 window.addEventListener('resize', ajustarFuenteLetra);
+
 
