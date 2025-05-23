@@ -88,14 +88,20 @@ window.login = () => {
 };
 
 onAuthStateChanged(auth, user => {
-  if (!user) return;
-  if (MUSICO_UIDS.includes(user.uid)) {
-    adminPanel.style.display = 'block';
-    loadSongs();
+  const loginButton = document.getElementById("loginButton");
+  if (user) {
+    if (MUSICO_UIDS.includes(user.uid)) {
+      adminPanel.style.display = 'block';
+      loadSongs();
+    } else {
+      alert("Acceso restringido al músico.");
+    }
+    if (loginButton) loginButton.style.display = "none";
   } else {
-    alert("Acceso restringido al músico.");
+    if (loginButton) loginButton.style.display = "block";
   }
 });
+
 
 window.showAddForm = () => {
   addForm.style.display = 'block';
