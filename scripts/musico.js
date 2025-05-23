@@ -32,9 +32,8 @@ function renderSong(song) {
   const letra = song.text || "";
   display.innerHTML = `
     <div id="displayTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
-    <pre id="displayText" style="font-family:inherit; white-space:pre-wrap; margin:0"></pre>
+    <pre id="displayText" style="font-family:inherit; white-space:pre-wrap; margin:0; overflow-wrap:break-word;">${letra}</pre>
   `;
-  document.getElementById('displayText').textContent = letra;
   ajustarFuenteLetra();
 }
 
@@ -43,7 +42,6 @@ function ajustarFuenteLetra() {
   if (!letraDiv) return;
   let fontSize = 32;
   letraDiv.style.fontSize = fontSize + 'px';
-  if (!letraDiv.textContent.trim()) return;
   const displayBox = display.getBoundingClientRect();
   const titleDiv = document.getElementById('displayTitle');
   const titleHeight = titleDiv ? titleDiv.offsetHeight : 0;
