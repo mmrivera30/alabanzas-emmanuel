@@ -102,7 +102,6 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-
 window.showAddForm = () => {
   addForm.style.display = 'block';
 };
@@ -142,5 +141,3 @@ window.eliminarCancion = () => {
 };
 
 window.addEventListener('resize', ajustarFuenteLetra);
-
-
