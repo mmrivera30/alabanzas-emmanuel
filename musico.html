@@ -52,18 +52,18 @@
       padding: 10px 12px;
       width: 100vw;
       height: 55vh;
-      overflow: auto; /* Cambiado para permitir scroll */
+      overflow: auto; /* Permitir scroll */
     }
 
     #displayTitle {
       font-weight: bold;
       margin-bottom: 8px;
-      font-size: 18px; /* Se aumentó el tamaño de la letra */
+      font-size: 16px; /* Tamaño modificado */
       text-align: center;
     }
 
     #displayText {
-      font-size: 16px; /* Se ajustó el tamaño de la letra */
+      font-size: 14px; /* Tamaño inicial */
       white-space: pre-wrap;
       word-break: break-word;
       overflow-wrap: break-word;
@@ -137,6 +137,30 @@
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
 
-  <script type="module" src="./scripts/musico.js"></script>
+  <script type="module">
+    // Ajustar dinámicamente el tamaño de la letra
+    function ajustarFuenteLetra() {
+      const displayText = document.getElementById("displayText");
+      const display = document.getElementById("display");
+      const displayBox = display.getBoundingClientRect();
+      const titleHeight = document.getElementById("displayTitle").offsetHeight;
+
+      let fontSize = 14; // Tamaño inicial de la fuente
+      displayText.style.fontSize = fontSize + "px";
+
+      // Reducir el tamaño de la fuente si el texto se desborda
+      while (
+        (displayText.scrollHeight > (display.clientHeight - titleHeight - 10) || displayText.scrollWidth > displayBox.width)
+        && fontSize > 10
+      ) {
+        fontSize--;
+        displayText.style.fontSize = fontSize + "px";
+      }
+    }
+
+    // Ajustar la fuente al cargar y al cambiar el tamaño de la ventana
+    window.addEventListener("resize", ajustarFuenteLetra);
+    window.addEventListener("DOMContentLoaded", ajustarFuenteLetra);
+  </script>
 </body>
 </html>
