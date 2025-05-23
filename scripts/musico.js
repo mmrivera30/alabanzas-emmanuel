@@ -22,7 +22,7 @@ const MUSICO_UIDS = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
 const songSelector = document.getElementById("songSelectorAdmin");
 const adminPanel = document.getElementById("adminPanel");
 const displayTitle = document.getElementById("displayTitle");
-const displayText = document.getElementById("displayText");
+const displayPre = document.getElementById("displayPre");
 const addForm = document.getElementById("addForm");
 const inputTitle = document.getElementById("songTitle");
 const inputText = document.getElementById("songText");
@@ -30,24 +30,41 @@ const inputText = document.getElementById("songText");
 let allSongs = {};
 
 function renderSong(song) {
-  const letra = song.text || "";
+  if (!song) {
+    displayTitle.textContent = "";
+    displayPre.textContent = "No hay alabanza.";
+    return;
+  }
   displayTitle.textContent = song.title || "";
-  displayText.textContent = letra;
+
+  // Procesar el texto para resaltar acordes en líneas completas
+  const lines = (song.text || "").split("\n");
+  let html = "";
+  for (const line of lines) {
+    const isChord = /^[A-G][#b]?m?(maj|min|dim|aug)?(\s|$)/.test(line.trim());
+    if (isChord && line.trim() !== "") {
+      html += `<span class="chord">${line}</span>\n`;
+    } else {
+      html += line + "\n";
+    }
+  }
+  // Ponemos el HTML en el <pre>
+  displayPre.innerHTML = html;
   ajustarFuenteLetra();
 }
 
 function ajustarFuenteLetra() {
-  if (!displayText) return;
+  if (!displayPre) return;
   let fontSize = 20;
-  displayText.style.fontSize = fontSize + 'px';
-  const displayBox = displayText.parentElement.getBoundingClientRect();
+  displayPre.style.fontSize = fontSize + 'px';
+  const displayBox = displayPre.parentElement.getBoundingClientRect();
   const titleHeight = displayTitle ? displayTitle.offsetHeight : 0;
   while (
-    (displayText.scrollHeight > (displayText.parentElement.clientHeight - titleHeight - 10) ||
-      displayText.scrollWidth > displayBox.width) && fontSize > 8
+    (displayPre.scrollHeight > (displayPre.parentElement.clientHeight - titleHeight - 10) ||
+      displayPre.scrollWidth > displayBox.width) && fontSize > 8
   ) {
     fontSize -= 1;
-    displayText.style.fontSize = fontSize + "px";
+    displayPre.style.fontSize = fontSize + "px";
   }
 }
 
@@ -73,7 +90,7 @@ songSelector?.addEventListener('change', () => {
     renderSong({ title, text });
   } else {
     displayTitle.textContent = "";
-    displayText.textContent = "";
+    displayPre.textContent = "";
   }
 });
 
@@ -101,7 +118,7 @@ window.showAddForm = () => {
 
 window.addSong = () => {
   const title = inputTitle.value.trim();
-  const text = inputText.value.trim();
+  const text = inputText.value; // NO uses .trim() aquí para no perder saltos iniciales/finales
   if (!title || !text) return alert("Completa todos los campos.");
   const key = title.toLowerCase().replace(/\s+/g, "_");
   set(ref(db, 'songsMusico/' + key), { title, text }).then(() => {
