@@ -58,12 +58,21 @@ function mostrarAlabanzas() {
       <p><strong>Con acordes:</strong> ${text || ""}</p>
       <p><strong>Sin acordes:</strong> ${letraSinAcordes}</p>
       <div class="btn-row">
-        <button class="btn-edit" onclick="abrirPopUpEditar('${key}', 'letras')">✏️ Editar Letras</button>
-        <button class="btn-edit" onclick="abrirPopUpEditar('${key}', 'letrasYacordes')">✏️ Editar Letras y Acordes</button>
-        <button class="btn-delete" onclick="confirmarEliminar('${key}')">🗑️ Eliminar</button>
+        <button class="btn-edit" data-key="${key}" data-type="letras">✏️ Editar Letras</button>
+        <button class="btn-edit" data-key="${key}" data-type="letrasYacordes">✏️ Editar Letras y Acordes</button>
+        <button class="btn-delete" data-key="${key}">🗑️ Eliminar</button>
       </div>
     `;
     lista.appendChild(card);
+  });
+
+  // Attach event listeners
+  document.querySelectorAll('.btn-edit').forEach(btn => {
+    btn.addEventListener('click', () => abrirPopUpEditar(btn.dataset.key, btn.dataset.type));
+  });
+
+  document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', () => confirmarEliminar(btn.dataset.key));
   });
 }
 
@@ -81,8 +90,8 @@ function abrirPopUpEditar(key, tipoEdicion) {
           <label for="songText">Texto</label>
           <textarea id="songText" required>${textoInicial}</textarea>
           <div class="popup-buttons">
-            <button type="button" onclick="guardarEdicion('${key}', '${tipoEdicion}')">Guardar</button>
-            <button type="button" onclick="cerrarPopUp()">Cancelar</button>
+            <button type="button" id="saveChanges">Guardar</button>
+            <button type="button" id="cancelChanges">Cancelar</button>
           </div>
         </form>
       </div>
@@ -90,6 +99,9 @@ function abrirPopUpEditar(key, tipoEdicion) {
   `;
   document.body.insertAdjacentHTML('beforeend', popUpHtml);
   agregarEstilosPopUp();
+
+  document.getElementById('saveChanges').addEventListener('click', () => guardarEdicion(key, tipoEdicion));
+  document.getElementById('cancelChanges').addEventListener('click', cerrarPopUp);
 }
 
 function cerrarPopUp() {
@@ -124,15 +136,19 @@ function confirmarEliminar(key) {
       <div class="popup-container">
         <h2>¿Qué deseas eliminar?</h2>
         <div class="popup-buttons">
-          <button onclick="eliminar('${key}', 'letras')">Solo Letras</button>
-          <button onclick="eliminar('${key}', 'todas')">Letras y Acordes</button>
-          <button onclick="cerrarPopUp()">Cancelar</button>
+          <button id="deleteLetras">Solo Letras</button>
+          <button id="deleteAmbas">Letras y Acordes</button>
+          <button id="cancelDelete">Cancelar</button>
         </div>
       </div>
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', opcionesHtml);
   agregarEstilosPopUp();
+
+  document.getElementById('deleteLetras').addEventListener('click', () => eliminar(key, 'letras'));
+  document.getElementById('deleteAmbas').addEventListener('click', () => eliminar(key, 'todas'));
+  document.getElementById('cancelDelete').addEventListener('click', cerrarPopUp);
 }
 
 function eliminar(key, tipoEliminacion) {
