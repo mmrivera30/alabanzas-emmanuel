@@ -58,12 +58,12 @@
     #displayTitle {
       font-weight: bold;
       margin-bottom: 8px;
-      font-size: 16px;
+      font-size: 18px; /* Se aumentó el tamaño de la letra */
       text-align: center;
     }
 
     #displayText {
-      font-size: 14px;
+      font-size: 16px; /* Se ajustó el tamaño de la letra */
       white-space: pre-wrap;
       word-break: break-word;
       overflow-wrap: break-word;
@@ -72,17 +72,16 @@
       color: #fff;
     }
 
-    /* Estilo para acordes */
     .chord {
       color: #00ffff; /* Color distintivo (azul claro) */
       font-weight: bold;
     }
 
-    .btn-list {
+    .btn-back {
       display: block;
       margin: 20px auto 0 auto;
       padding: 10px 16px;
-      background-color: #4CAF50;
+      background-color: #313293;
       color: #fff;
       text-decoration: none;
       border-radius: 8px;
@@ -93,8 +92,8 @@
       box-shadow: 0 2px 8px #2223a322;
     }
 
-    .btn-list:hover {
-      background-color: #45a049;
+    .btn-back:hover {
+      background-color: #9a6326;
     }
 
     footer {
@@ -134,9 +133,6 @@
     <div id="displayTitle"></div>
     <pre id="displayText">Selecciona una alabanza para ver la letra.</pre>
   </div>
-
-  <!-- Botón nuevo para listar alabanzas -->
-  <button class="btn-list" onclick="showSongList()">📜 Ver lista de alabanzas</button>
 
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
