@@ -31,10 +31,16 @@ const adminPanel = document.getElementById("adminPanel");
 let allSongs = {};
 let currentKey = null;
 
+// Resaltar acordes en el texto
+function highlightChords(text) {
+  const chordRegex = /\[([A-G#bmajmin7]+)\]/g; // Identificar acordes como [G], [Am]
+  return text.replace(chordRegex, '<span class="chord">[$1]</span>');
+}
+
 function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
-  displayText.textContent = song.text || "";
+  displayText.innerHTML = highlightChords(song.text || "");
   editDeleteButtons.style.display = 'flex';
   ajustarFuenteLetra();
 }
@@ -138,6 +144,25 @@ window.eliminarCancion = () => {
       songSelector.value = "";
     });
   }
+};
+
+window.showSongList = () => {
+  const songList = Object.entries(allSongs).map(([key, song]) => `
+    <div>
+      ${song.title}
+      <button onclick="moveUp('${key}')">⬆</button>
+      <button onclick="moveDown('${key}')">⬇</button>
+    </div>
+  `).join("");
+  displayText.innerHTML = songList || "No hay alabanzas.";
+};
+
+window.moveUp = (key) => {
+  console.log(`Mover ${key} hacia arriba`);
+};
+
+window.moveDown = (key) => {
+  console.log(`Mover ${key} hacia abajo`);
 };
 
 window.addEventListener('resize', ajustarFuenteLetra);
