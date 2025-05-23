@@ -5,140 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Administrador Músico</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      width: 100vw;
-      box-sizing: border-box;
-      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 13px;
-      color: #313293;
-      overflow-x: hidden !important;
-    }
     body {
+      margin: 0;
+      padding: 1em;
+      font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
-      overflow-x: hidden !important;
-      padding: 0.8em;
+      color: #313293;
     }
+
     h1 {
       text-align: center;
-      color: #fff;
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 1.2px;
-      text-shadow: 0 2px 8px #31329399, 0 1px 0 #fff2;
-      margin-top: 24px;
-      margin-bottom: 16px;
+      color: white;
     }
-    select, button, textarea, input {
-      width: 100%;
-      font-size: 13px;
-      margin: 5px 0;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid #9a6326;
-      box-sizing: border-box;
-    }
-    .chord { color: #9a6326; font-weight: bold; }
-    pre { white-space: pre-wrap; font-size: 13px; line-height: 1.4em; }
-    .admin { display: none; margin-top: 18px; }
+
     #display {
-      margin: 22px auto 0 auto;
-      padding: 18px 12px;
       background: #fff;
-      color: #313293;
-      border-radius: 16px;
-      box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
-      font-size: 13px;
-      min-height: 120px;
+      margin: 20px auto;
+      padding: 16px;
+      border-radius: 12px;
       max-width: 700px;
-      width: 98vw;
-      font-family: inherit;
-      white-space: pre-wrap;
-      line-height: 1.4;
-      text-align: left;
-      word-break: break-word;
-      overflow-x: hidden;
-      overflow-wrap: break-word;
-    }
-    a.button, .btn-back {
-      display: block;
-      margin: 18px auto 0 auto;
-      padding: 8px 18px;
-      background-color: #313293;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 13px;
-      text-align: center;
-      max-width: 230px;
-      border: none;
-      font-weight: bold;
+      width: 100%;
+      min-height: 120px;
       box-shadow: 0 2px 8px #2223a322;
-      transition: background 0.2s, color 0.2s;
-      cursor: pointer;
-      box-sizing: border-box;
+      overflow: hidden;
     }
-    a.button:hover, .btn-back:hover {
-      background-color: #9a6326;
-      color: #fff;
+
+    #displayTitle {
+      font-weight: bold;
+      margin-bottom: 12px;
     }
-    footer {
-      margin-top: 28px;
-      text-align: center;
-      font-size: 11px;
-      color: #fff;
-      opacity: 0.7;
-      text-shadow: 0 1px 6px #313293;
-    }
-    .logo-inline {
-      vertical-align: middle;
-      width: 40px;
-      margin-right: 8px;
-    }
-    /* Responsive adjustments */
-    @media (max-width: 900px) {
-      #display { max-width: 99vw; padding: 14px 4vw; font-size: 13px; }
-      select, button, textarea, input { font-size: 13px; }
-    }
-    @media (max-width: 700px) {
-      h1 { font-size: 15px; }
-      #display { padding: 8px 2vw; font-size: 13px; }
-      select, button, textarea, input { font-size: 13px; }
-      a.button, .btn-back { max-width: 99vw; }
-    }
-    @media (max-width: 500px) {
-      #display { padding: 4px 1vw; font-size: 12px; }
-      select, button, textarea, input { font-size: 12px; }
-      h1 { font-size: 14px; }
+
+    #displayText {
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      margin: 0;
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-  
   <h1>Vista del Músico</h1>
-  
-  <button id="loginBtn" onclick="login()">Iniciar sesión como músico</button>
-  <div id="adminPanel" class="admin">
-    
+  <button onclick="login()">Iniciar sesión como músico</button>
+
+  <div id="adminPanel" style="display:none;">
     <select id="songSelectorAdmin">
       <option value="">Selecciona una alabanza</option>
-      <!-- Opciones dinámicas aquí -->
     </select>
     <button onclick="showAddForm()">Agregar nueva alabanza</button>
     <div id="addForm" style="display:none;">
-      <input id="songTitle" type="text" placeholder="Título de la alabanza">
+      <input id="songTitle" type="text" placeholder="Título de la alabanza" />
       <textarea id="songText" placeholder="Letra de la alabanza"></textarea>
-      <button onclick="addSong()">Guardar Alabanza</button>
+      <button onclick="addSong()">Guardar</button>
     </div>
   </div>
 
-  <div id='display'>Cargando alabanza...</div>
-  
-  <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
-  <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
+  <div id="display">
+    <div id="displayTitle"></div>
+    <pre id="displayText">Cargando...</pre>
+  </div>
+
+  <a href="index.html">⬅ Volver al inicio</a>
+
   <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>
+
