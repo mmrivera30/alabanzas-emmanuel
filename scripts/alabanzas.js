@@ -57,10 +57,14 @@ function mostrarAlabanzas() {
 
     // Mostrar solo letras sin acordes
     card.innerHTML = `
-      <strong>${title}</strong>
-      <p><strong>Letra:</strong></p>
-      <textarea readonly rows="3">${letraSinAcordes}</textarea>
-      <div class="btn-row">
+      <div class="card-header">
+        <strong>${title}</strong>
+      </div>
+      <div class="card-body">
+        <p><strong>Letra:</strong></p>
+        <textarea readonly rows="5">${letraSinAcordes}</textarea>
+      </div>
+      <div class="card-footer">
         <button class="btn-edit" data-key="${key}" data-type="letras">✏️ Editar Letras</button>
         <button class="btn-delete" data-key="${key}">🗑️ Eliminar</button>
       </div>
@@ -101,7 +105,7 @@ function abrirPopUpEditar(key) {
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', popUpHtml);
-  agregarEstilosPopUp();
+  agregarEstilosGenerales();
 
   document.getElementById('saveChanges').addEventListener('click', () => guardarEdicion(key));
   document.getElementById('cancelChanges').addEventListener('click', cerrarPopUp);
@@ -141,7 +145,7 @@ function confirmarEliminar(key) {
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', opcionesHtml);
-  agregarEstilosPopUp();
+  agregarEstilosGenerales();
 
   document.getElementById('deleteConfirm').addEventListener('click', () => eliminar(key));
   document.getElementById('cancelDelete').addEventListener('click', cerrarPopUp);
@@ -159,9 +163,55 @@ function eliminar(key) {
     });
 }
 
-function agregarEstilosPopUp() {
+function agregarEstilosGenerales() {
   const estilo = document.createElement('style');
   estilo.textContent = `
+    .alabanza-card {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      font-size: 1.2rem;
+      color: #313293;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .card-body textarea {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      resize: none;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .btn-edit, .btn-delete {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-edit {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn-edit:hover {
+      background-color: #45a049;
+    }
+    .btn-delete {
+      background-color: #f44336;
+      color: white;
+    }
+    .btn-delete:hover {
+      background-color: #e53935;
+    }
     .popup-overlay {
       position: fixed;
       top: 0;
@@ -182,21 +232,31 @@ function agregarEstilosPopUp() {
       max-width: 500px;
       text-align: center;
     }
-    .popup-container textarea {
+    .popup-container textarea,
+    .popup-container input {
       width: 100%;
-      resize: none;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
     .popup-buttons button {
       margin: 10px;
       padding: 10px 20px;
       border: none;
       border-radius: 4px;
-      background-color: #313293;
-      color: white;
       cursor: pointer;
     }
     .popup-buttons button:hover {
-      background-color: #2b2c80;
+      opacity: 0.9;
+    }
+    .popup-buttons #saveChanges {
+      background-color: #313293;
+      color: white;
+    }
+    .popup-buttons #cancelDelete, .popup-buttons #cancelChanges {
+      background-color: #f44336;
+      color: white;
     }
   `;
   document.head.appendChild(estilo);
