@@ -51,21 +51,17 @@ function mostrarAlabanzas() {
   lista.innerHTML = "";
   Object.entries(todasLasAlabanzas).forEach(([key, { title, text }]) => {
     const letraSinAcordes = filtrarSoloLetras(text || ""); // Generar texto sin acordes
-    const letraConAcordes = text || ""; // Mantener texto con acordes
 
     const card = document.createElement("div");
     card.className = "alabanza-card";
 
-    // Mostrar ambas versiones en la pantalla
+    // Mostrar solo letras sin acordes
     card.innerHTML = `
       <strong>${title}</strong>
-      <p><strong>Con acordes:</strong></p>
-      <textarea readonly rows="3">${letraConAcordes}</textarea>
-      <p><strong>Sin acordes:</strong></p>
+      <p><strong>Letra:</strong></p>
       <textarea readonly rows="3">${letraSinAcordes}</textarea>
       <div class="btn-row">
         <button class="btn-edit" data-key="${key}" data-type="letras">✏️ Editar Letras</button>
-        <button class="btn-edit" data-key="${key}" data-type="letrasYacordes">✏️ Editar Letras y Acordes</button>
         <button class="btn-delete" data-key="${key}">🗑️ Eliminar</button>
       </div>
     `;
@@ -75,7 +71,7 @@ function mostrarAlabanzas() {
 
   // Vincular eventos a los botones
   document.querySelectorAll('.btn-edit').forEach(btn => {
-    btn.addEventListener('click', () => abrirPopUpEditar(btn.dataset.key, btn.dataset.type));
+    btn.addEventListener('click', () => abrirPopUpEditar(btn.dataset.key));
   });
 
   document.querySelectorAll('.btn-delete').forEach(btn => {
@@ -83,21 +79,14 @@ function mostrarAlabanzas() {
   });
 }
 
-function abrirPopUpEditar(key, tipoEdicion) {
+function abrirPopUpEditar(key) {
   const song = todasLasAlabanzas[key];
-  let textoInicial;
-
-  // Determinar el contenido basado en el tipo de edición
-  if (tipoEdicion === "letras") {
-    textoInicial = filtrarSoloLetras(song.text || ""); // Solo letras (sin acordes)
-  } else if (tipoEdicion === "letrasYacordes") {
-    textoInicial = song.text || ""; // Letras con acordes
-  }
+  const textoInicial = filtrarSoloLetras(song.text || ""); // Solo letras sin acordes
 
   const popUpHtml = `
     <div class="popup-overlay">
       <div class="popup-container">
-        <h2>Editar ${tipoEdicion === "letras" ? "Letras" : "Letras y Acordes"}</h2>
+        <h2>Editar Letras</h2>
         <form id="editForm">
           <label for="songTitle">Título</label>
           <input type="text" id="songTitle" value="${song.title}" required>
@@ -114,7 +103,7 @@ function abrirPopUpEditar(key, tipoEdicion) {
   document.body.insertAdjacentHTML('beforeend', popUpHtml);
   agregarEstilosPopUp();
 
-  document.getElementById('saveChanges').addEventListener('click', () => guardarEdicion(key, tipoEdicion));
+  document.getElementById('saveChanges').addEventListener('click', () => guardarEdicion(key));
   document.getElementById('cancelChanges').addEventListener('click', cerrarPopUp);
 }
 
@@ -123,7 +112,7 @@ function cerrarPopUp() {
   if (popUp) popUp.remove();
 }
 
-function guardarEdicion(key, tipoEdicion) {
+function guardarEdicion(key) {
   const nuevoTitulo = document.getElementById("songTitle").value.trim();
   const nuevoTexto = document.getElementById("songText").value.trim();
 
@@ -132,12 +121,7 @@ function guardarEdicion(key, tipoEdicion) {
     return;
   }
 
-  if (tipoEdicion === "letras") {
-    const letrasSinAcordes = filtrarSoloLetras(nuevoTexto);
-    set(ref(db, 'songsCantante/' + key), { title: nuevoTitulo, text: letrasSinAcordes });
-  } else {
-    set(ref(db, 'songsCantante/' + key), { title: nuevoTitulo, text: nuevoTexto });
-  }
+  set(ref(db, 'songsCantante/' + key), { title: nuevoTitulo, text: nuevoTexto });
 
   alert("Cambios guardados correctamente.");
   cerrarPopUp();
@@ -145,21 +129,12 @@ function guardarEdicion(key, tipoEdicion) {
 }
 
 function confirmarEliminar(key) {
-  const song = todasLasAlabanzas[key];
-  const textoConAcordes = song.text || "";
-  const textoSinAcordes = filtrarSoloLetras(textoConAcordes);
-
   const opcionesHtml = `
     <div class="popup-overlay">
       <div class="popup-container">
-        <h2>¿Qué deseas eliminar?</h2>
-        <p><strong>Con acordes:</strong></p>
-        <textarea readonly rows="5">${textoConAcordes}</textarea>
-        <p><strong>Sin acordes:</strong></p>
-        <textarea readonly rows="5">${textoSinAcordes}</textarea>
+        <h2>¿Estás seguro de eliminar esta alabanza?</h2>
         <div class="popup-buttons">
-          <button id="deleteLetras">Solo Letras</button>
-          <button id="deleteAmbas">Letras y Acordes</button>
+          <button id="deleteConfirm">Eliminar</button>
           <button id="cancelDelete">Cancelar</button>
         </div>
       </div>
@@ -168,24 +143,20 @@ function confirmarEliminar(key) {
   document.body.insertAdjacentHTML('beforeend', opcionesHtml);
   agregarEstilosPopUp();
 
-  document.getElementById('deleteLetras').addEventListener('click', () => eliminar(key, 'letras'));
-  document.getElementById('deleteAmbas').addEventListener('click', () => eliminar(key, 'todas'));
+  document.getElementById('deleteConfirm').addEventListener('click', () => eliminar(key));
   document.getElementById('cancelDelete').addEventListener('click', cerrarPopUp);
 }
 
-function eliminar(key, tipoEliminacion) {
-  if (tipoEliminacion === "letras") {
-    const song = todasLasAlabanzas[key];
-    const textoConAcordes = song.text || "";
-    const textoActualizado = textoConAcordes.replace(/(^|\n)\[.*?\]/g, ""); // Solo elimina los acordes
-    set(ref(db, 'songsCantante/' + key), { title: song.title, text: textoActualizado });
-  } else if (tipoEliminacion === "todas") {
-    remove(ref(db, 'songsCantante/' + key));
-  }
-
-  alert("Eliminación realizada correctamente.");
-  cerrarPopUp();
-  cargarAlabanzas();
+function eliminar(key) {
+  remove(ref(db, 'songsCantante/' + key))
+    .then(() => {
+      alert("Alabanza eliminada correctamente.");
+      cerrarPopUp();
+      cargarAlabanzas();
+    })
+    .catch(() => {
+      alert("Hubo un error al eliminar la alabanza.");
+    });
 }
 
 function agregarEstilosPopUp() {
