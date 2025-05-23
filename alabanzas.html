@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pantalla Músico</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .logo-inline {
+      height: 36px;
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      font-size: 16px;
+      margin: 4px 0 10px;
+    }
+
+    #display {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 8px;
+      overflow-y: auto;
+    }
+
+    #displayTitle {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    #displayText {
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      width: 96vw;
+      color: #fff;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png"
+         class="logo-inline" alt="Logo" />
+    <h1>Proyección del Músico</h1>
+  </header>
+
+  <div id="display">
+    <div id="displayTitle">Cargando...</div>
+    <pre id="displayText">Esperando selección...</pre>
+  </div>
+
+  <script type="module" src="./scripts/pantalla-musico.js"></script>
+</body>
+</html>
