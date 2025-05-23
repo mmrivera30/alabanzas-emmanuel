@@ -31,21 +31,21 @@ let allSongs = {};
 function renderSong(song) {
   const letra = song.text || "";
   display.innerHTML = `
-    <div id="songTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
-    <pre id="songText" style="font-family:inherit; white-space:pre-wrap; margin:0"></pre>
+    <div id="displayTitle" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;">${song.title}</div>
+    <pre id="displayText" style="font-family:inherit; white-space:pre-wrap; margin:0"></pre>
   `;
-  document.getElementById('songText').textContent = letra;
+  document.getElementById('displayText').textContent = letra;
   ajustarFuenteLetra();
 }
 
 function ajustarFuenteLetra() {
-  const letraDiv = document.getElementById('songText');
+  const letraDiv = document.getElementById('displayText');
   if (!letraDiv) return;
   let fontSize = 32;
   letraDiv.style.fontSize = fontSize + 'px';
   if (!letraDiv.textContent.trim()) return;
   const displayBox = display.getBoundingClientRect();
-  const titleDiv = document.getElementById('songTitle');
+  const titleDiv = document.getElementById('displayTitle');
   const titleHeight = titleDiv ? titleDiv.offsetHeight : 0;
   while (
     (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width)
@@ -70,7 +70,6 @@ function loadSongs() {
   });
 }
 
-// CORREGIDO: Sólo pasa título y texto a renderSong y a la base
 songSelector?.addEventListener('change', () => {
   const key = songSelector.value;
   if (key && allSongs[key]) {
@@ -119,3 +118,4 @@ window.addSong = () => {
 };
 
 window.addEventListener('resize', ajustarFuenteLetra);
+
