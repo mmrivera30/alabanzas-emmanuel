@@ -52,18 +52,18 @@
       padding: 10px 12px;
       width: 100vw;
       height: 55vh;
-      overflow: auto; /* Permitir scroll */
+      overflow: auto; /* Cambiado para permitir scroll */
     }
 
     #displayTitle {
       font-weight: bold;
       margin-bottom: 8px;
-      font-size: 16px; /* Tamaño modificado */
+      font-size: 16px;
       text-align: center;
     }
 
     #displayText {
-      font-size: 14px; /* Tamaño inicial */
+      font-size: 14px;
       white-space: pre-wrap;
       word-break: break-word;
       overflow-wrap: break-word;
@@ -72,16 +72,17 @@
       color: #fff;
     }
 
+    /* Estilo para acordes */
     .chord {
       color: #00ffff; /* Color distintivo (azul claro) */
       font-weight: bold;
     }
 
-    .btn-back {
+    .btn-list {
       display: block;
       margin: 20px auto 0 auto;
       padding: 10px 16px;
-      background-color: #313293;
+      background-color: #4CAF50;
       color: #fff;
       text-decoration: none;
       border-radius: 8px;
@@ -92,8 +93,8 @@
       box-shadow: 0 2px 8px #2223a322;
     }
 
-    .btn-back:hover {
-      background-color: #9a6326;
+    .btn-list:hover {
+      background-color: #45a049;
     }
 
     footer {
@@ -134,33 +135,12 @@
     <pre id="displayText">Selecciona una alabanza para ver la letra.</pre>
   </div>
 
+  <!-- Botón nuevo para listar alabanzas -->
+  <button class="btn-list" onclick="showSongList()">📜 Ver lista de alabanzas</button>
+
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
 
-  <script type="module">
-    // Ajustar dinámicamente el tamaño de la letra
-    function ajustarFuenteLetra() {
-      const displayText = document.getElementById("displayText");
-      const display = document.getElementById("display");
-      const displayBox = display.getBoundingClientRect();
-      const titleHeight = document.getElementById("displayTitle").offsetHeight;
-
-      let fontSize = 14; // Tamaño inicial de la fuente
-      displayText.style.fontSize = fontSize + "px";
-
-      // Reducir el tamaño de la fuente si el texto se desborda
-      while (
-        (displayText.scrollHeight > (display.clientHeight - titleHeight - 10) || displayText.scrollWidth > displayBox.width)
-        && fontSize > 10
-      ) {
-        fontSize--;
-        displayText.style.fontSize = fontSize + "px";
-      }
-    }
-
-    // Ajustar la fuente al cargar y al cambiar el tamaño de la ventana
-    window.addEventListener("resize", ajustarFuenteLetra);
-    window.addEventListener("DOMContentLoaded", ajustarFuenteLetra);
-  </script>
+  <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>
