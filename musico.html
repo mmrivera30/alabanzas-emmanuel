@@ -5,24 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Administrador Músico</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     html, body {
       margin: 0;
       padding: 0;
-      width: 100vw;
-      height: 100vh;
       background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       font-family: 'Segoe UI', sans-serif;
       color: white;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .logo-inline {
+      height: 36px;
+      margin-bottom: 4px;
     }
 
     h1 {
       text-align: center;
       font-size: 18px;
-      margin: 12px 0;
+      margin: 10px 0 12px;
     }
 
     select, input, textarea, button {
@@ -34,6 +41,7 @@
       border-radius: 8px;
       font-size: 14px;
       border: 1px solid #9a6326;
+      box-sizing: border-box;
     }
 
     .admin {
@@ -41,8 +49,7 @@
     }
 
     #display {
-      padding: 8px 12px;
-      margin-top: 10px;
+      padding: 10px 12px;
       width: 100vw;
       height: 55vh;
       overflow: hidden;
@@ -50,7 +57,7 @@
 
     #displayTitle {
       font-weight: bold;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-size: 16px;
       text-align: center;
     }
@@ -114,6 +121,11 @@
 </head>
 <body>
 
+  <header>
+    <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png"
+         class="logo-inline" alt="Logo" />
+  </header>
+
   <h1>Vista del Músico</h1>
 
   <button onclick="login()">Iniciar sesión como músico</button>
@@ -142,7 +154,6 @@
   </div>
 
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
-
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
 
   <script type="module" src="./scripts/musico.js"></script>
