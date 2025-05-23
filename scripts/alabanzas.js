@@ -44,7 +44,6 @@ function cargarAlabanzas() {
 }
 
 function filtrarSoloLetras(texto) {
-  // Eliminar acordes entre corchetes como [G], [Am]
   return texto.replace(/\[.*?\]/g, "").trim();
 }
 
@@ -59,7 +58,8 @@ function mostrarAlabanzas() {
       <p><strong>Con acordes:</strong> ${text || ""}</p>
       <p><strong>Sin acordes:</strong> ${letraSinAcordes}</p>
       <div class="btn-row">
-        <button class="btn-edit" onclick="mostrarFormularioEdicion('${key}')">✏️ Editar</button>
+        <button class="btn-edit" onclick="editarLetras('${key}')">✏️ Editar Letras</button>
+        <button class="btn-edit" onclick="editarLetrasYAcordes('${key}')">✏️ Editar Letras y Acordes</button>
         <button class="btn-delete" onclick="eliminar('${key}')">🗑️ Eliminar</button>
       </div>
     `;
@@ -67,45 +67,41 @@ function mostrarAlabanzas() {
   });
 }
 
-function mostrarFormularioEdicion(key) {
+function editarLetras(key) {
   const song = todasLasAlabanzas[key];
-  const formHtml = `
-    <div class="edit-form-container">
-      <h2>Editar Alabanza</h2>
-      <form id="editSongForm">
-        <label for="songTitle">Título</label>
-        <input type="text" id="songTitle" name="songTitle" value="${song.title}" required>
-
-        <label for="songText">Letra</label>
-        <textarea id="songText" name="songText" required>${song.text}</textarea>
-
-        <button type="button" onclick="guardarEdicion('${key}')">Guardar Cambios</button>
-        <button type="button" onclick="cancelarEdicion()">Cancelar</button>
-      </form>
-    </div>
-  `;
-  lista.innerHTML = formHtml; // Reemplaza el contenido de la lista con el formulario
+  const nuevaLetra = prompt("Edita solo las letras (sin acordes):", filtrarSoloLetras(song.text || ""));
+  if (nuevaLetra !== null) {
+    const textoConAcordes = song.text || "";
+    const textoActualizado = textoConAcordes.replace(/(^|\n)\[.*?\]/g, ""); // Reemplaza solo las letras
+    set(ref(db, 'songsCantante/' + key), {
+      title: song.title,
+      text: textoActualizado
+    }).then(() => {
+      alert("Letras actualizadas correctamente.");
+      cargarAlabanzas();
+    });
+  }
 }
 
-function guardarEdicion(key) {
-  const title = document.getElementById("songTitle").value.trim();
-  const text = document.getElementById("songText").value.trim();
-  if (!title || !text) return alert("Completa todos los campos.");
-  set(ref(db, 'songsCantante/' + key), { title, text }).then(() => {
-    alert("Alabanza actualizada correctamente.");
-    cargarAlabanzas(); // Recargar la lista después de guardar
-  });
-}
-
-function cancelarEdicion() {
-  cargarAlabanzas(); // Recargar la lista sin guardar cambios
+function editarLetrasYAcordes(key) {
+  const song = todasLasAlabanzas[key];
+  const nuevoTexto = prompt("Edita las letras y acordes:", song.text || "");
+  if (nuevoTexto !== null) {
+    set(ref(db, 'songsCantante/' + key), {
+      title: song.title,
+      text: nuevoTexto
+    }).then(() => {
+      alert("Letras y acordes actualizados correctamente.");
+      cargarAlabanzas();
+    });
+  }
 }
 
 window.eliminar = (key) => {
   if (confirm("¿Seguro que deseas eliminar esta alabanza?")) {
     remove(ref(db, 'songsCantante/' + key)).then(() => {
       alert("Alabanza eliminada correctamente.");
-      cargarAlabanzas(); // Recargar la lista después de eliminar
+      cargarAlabanzas();
     });
   }
 };
