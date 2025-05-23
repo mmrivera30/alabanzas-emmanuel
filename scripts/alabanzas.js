@@ -50,23 +50,30 @@ function filtrarSoloLetras(texto) {
 function mostrarAlabanzas() {
   lista.innerHTML = "";
   Object.entries(todasLasAlabanzas).forEach(([key, { title, text }]) => {
-    const letraSinAcordes = filtrarSoloLetras(text || "");
+    const letraSinAcordes = filtrarSoloLetras(text || ""); // Generar texto sin acordes
+    const letraConAcordes = text || ""; // Mantener texto con acordes
+
     const card = document.createElement("div");
     card.className = "alabanza-card";
+
+    // Mostrar ambas versiones en la pantalla
     card.innerHTML = `
       <strong>${title}</strong>
-      <p><strong>Con acordes:</strong> ${text || ""}</p>
-      <p><strong>Sin acordes:</strong> ${letraSinAcordes}</p>
+      <p><strong>Con acordes:</strong></p>
+      <textarea readonly rows="3">${letraConAcordes}</textarea>
+      <p><strong>Sin acordes:</strong></p>
+      <textarea readonly rows="3">${letraSinAcordes}</textarea>
       <div class="btn-row">
         <button class="btn-edit" data-key="${key}" data-type="letras">✏️ Editar Letras</button>
         <button class="btn-edit" data-key="${key}" data-type="letrasYacordes">✏️ Editar Letras y Acordes</button>
         <button class="btn-delete" data-key="${key}">🗑️ Eliminar</button>
       </div>
     `;
+
     lista.appendChild(card);
   });
 
-  // Attach event listeners
+  // Vincular eventos a los botones
   document.querySelectorAll('.btn-edit').forEach(btn => {
     btn.addEventListener('click', () => abrirPopUpEditar(btn.dataset.key, btn.dataset.type));
   });
@@ -78,7 +85,14 @@ function mostrarAlabanzas() {
 
 function abrirPopUpEditar(key, tipoEdicion) {
   const song = todasLasAlabanzas[key];
-  const textoInicial = tipoEdicion === "letras" ? filtrarSoloLetras(song.text || "") : song.text || "";
+  let textoInicial;
+
+  // Determinar el contenido basado en el tipo de edición
+  if (tipoEdicion === "letras") {
+    textoInicial = filtrarSoloLetras(song.text || ""); // Solo letras (sin acordes)
+  } else if (tipoEdicion === "letrasYacordes") {
+    textoInicial = song.text || ""; // Letras con acordes
+  }
 
   const popUpHtml = `
     <div class="popup-overlay">
