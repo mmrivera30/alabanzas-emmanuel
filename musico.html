@@ -5,106 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Administrador Músico</title>
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
       margin: 0;
-      padding: 1em;
-      font-family: 'Segoe UI', sans-serif;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
       background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
-      color: #313293;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
     }
 
     h1 {
       text-align: center;
-      color: white;
+      font-size: 18px;
+      margin: 12px 0;
     }
 
     select, input, textarea, button {
       width: 100%;
-      padding: 8px;
-      margin: 8px 0;
-      font-size: 14px;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-
-    #display {
-      background: #fff;
-      padding: 16px;
-      margin: 20px auto;
-      border-radius: 12px;
       max-width: 700px;
-      width: 100%;
-      box-sizing: border-box;
-      box-shadow: 0 2px 8px #2223a322;
-      overflow: hidden;
-    }
-
-    #displayTitle {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    #displayText {
-      white-space: pre-wrap;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      font-size: 14px;
-      margin: 0;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .action-buttons button {
-      flex: 1;
-      background-color: #313293;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      border-radius: 8px;
+      margin: 6px auto;
+      display: block;
       padding: 8px;
-    }
-
-    .action-buttons button:hover {
-      background-color: #9a6326;
+      border-radius: 8px;
+      font-size: 14px;
+      border: 1px solid #9a6326;
     }
 
     .admin {
       display: none;
     }
 
+    #display {
+      padding: 8px 12px;
+      margin-top: 10px;
+      width: 100vw;
+      height: 55vh;
+      overflow: hidden;
+    }
+
+    #displayTitle {
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    #displayText {
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      margin: 0 auto;
+      width: 96vw;
+      color: #fff;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .action-buttons button {
+      background-color: #313293;
+      color: #fff;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .action-buttons button:hover {
+      background-color: #9a6326;
+    }
+
     .btn-back {
       display: block;
-      margin: 18px auto 0 auto;
-      padding: 8px 18px;
+      margin: 20px auto 0 auto;
+      padding: 10px 16px;
       background-color: #313293;
       color: #fff;
       text-decoration: none;
       border-radius: 8px;
       font-size: 13px;
-      text-align: center;
-      max-width: 230px;
-      border: none;
       font-weight: bold;
+      max-width: 230px;
+      text-align: center;
       box-shadow: 0 2px 8px #2223a322;
-      transition: background 0.2s, color 0.2s;
-      cursor: pointer;
-      box-sizing: border-box;
     }
 
     .btn-back:hover {
       background-color: #9a6326;
-      color: #fff;
     }
 
     footer {
       text-align: center;
-      color: #fff;
-      margin-top: 30px;
-      font-size: 12px;
+      margin-top: 20px;
+      font-size: 11px;
       opacity: 0.6;
     }
   </style>
@@ -121,7 +124,7 @@
     </select>
 
     <button onclick="showAddForm()">Agregar nueva alabanza</button>
-    
+
     <div id="addForm" style="display:none;">
       <input id="songTitle" type="text" placeholder="Título de la alabanza" />
       <textarea id="songText" placeholder="Letra de la alabanza (con acordes)"></textarea>
@@ -139,6 +142,7 @@
   </div>
 
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
+
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
 
   <script type="module" src="./scripts/musico.js"></script>
