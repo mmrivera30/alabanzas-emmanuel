@@ -58,14 +58,14 @@ function mostrarAlabanzas() {
     // Mostrar solo letras sin acordes
     card.innerHTML = `
       <div class="card-header">
-        <strong>${title}</strong>
+        <h2>${title}</h2>
       </div>
       <div class="card-body">
         <p><strong>Letra:</strong></p>
         <textarea readonly rows="5">${letraSinAcordes}</textarea>
       </div>
       <div class="card-footer">
-        <button class="btn-edit" data-key="${key}" data-type="letras">✏️ Editar Letras</button>
+        <button class="btn-edit" data-key="${key}" data-type="letras">✏️ Editar</button>
         <button class="btn-delete" data-key="${key}">🗑️ Eliminar</button>
       </div>
     `;
@@ -105,7 +105,7 @@ function abrirPopUpEditar(key) {
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', popUpHtml);
-  agregarEstilosGenerales();
+  agregarEstilos();
 
   document.getElementById('saveChanges').addEventListener('click', () => guardarEdicion(key));
   document.getElementById('cancelChanges').addEventListener('click', cerrarPopUp);
@@ -145,7 +145,7 @@ function confirmarEliminar(key) {
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', opcionesHtml);
-  agregarEstilosGenerales();
+  agregarEstilos();
 
   document.getElementById('deleteConfirm').addEventListener('click', () => eliminar(key));
   document.getElementById('cancelDelete').addEventListener('click', cerrarPopUp);
@@ -163,43 +163,50 @@ function eliminar(key) {
     });
 }
 
-function agregarEstilosGenerales() {
+function agregarEstilos() {
   const estilo = document.createElement('style');
   estilo.textContent = `
     .alabanza-card {
-      background: #f8f9fa;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin: 10px;
-      padding: 15px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    .card-header {
-      font-size: 1.2rem;
+    .alabanza-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .card-header h2 {
+      font-size: 1.5rem;
       color: #313293;
-      margin-bottom: 10px;
-      font-weight: bold;
+      margin: 0;
+      text-align: center;
     }
     .card-body textarea {
       width: 100%;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 5px;
       padding: 10px;
       resize: none;
     }
     .card-footer {
       display: flex;
       justify-content: space-between;
-      margin-top: 10px;
+      margin-top: 15px;
     }
     .btn-edit, .btn-delete {
-      padding: 10px 15px;
+      padding: 10px 20px;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
+      font-size: 0.9rem;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     .btn-edit {
-      background-color: #4CAF50;
+      background-color: #4caf50;
       color: white;
     }
     .btn-edit:hover {
@@ -227,7 +234,7 @@ function agregarEstilosGenerales() {
     .popup-container {
       background: white;
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 10px;
       width: 90%;
       max-width: 500px;
       text-align: center;
@@ -238,14 +245,16 @@ function agregarEstilosGenerales() {
       margin-bottom: 10px;
       padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 5px;
     }
     .popup-buttons button {
       margin: 10px;
       padding: 10px 20px;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
+      font-size: 0.9rem;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     .popup-buttons button:hover {
       opacity: 0.9;
