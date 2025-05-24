@@ -43,44 +43,30 @@ function showMessage(msg, success = true) {
 function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
+  const texto = song.text || "";
+  const lineas = texto.split("\n");
+  displayText.innerHTML = "";
 
-  // 1. Resalta acordes con HTML
-  let resaltado = song.text || "";
-  resaltado = resaltado.replace(
-    /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
-    (match, p1, p2) => {
-      if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
-        return p1 + `<span class="chord">${p2}</span>`;
+  for (let linea of lineas) {
+    const divLinea = document.createElement("div");
+    divLinea.className = "linea";
+
+    let contenido = linea.replace(/ /g, "\u00A0");
+
+    contenido = contenido.replace(
+      /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
+      (match, p1, p2) => {
+        if (/^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
+          return p1 + `<span class="chord">${p2}</span>`;
+        }
+        return match;
       }
-      return match;
-    }
-  );
+    );
 
-  // 2. Conserva espacios y saltos de línea fielmente:
-  //    - Espacios: &nbsp; (incluida indentación al inicio de línea)
-  //    - Saltos de línea: <br>
-  resaltado = resaltado
-    .split('\n').map(line =>
-      line.replace(/ /g, '&nbsp;')
-    ).join('<br>');
-
-  displayText.innerHTML = resaltado;
-
-  // Mostrar botones de acción si es admin
-  const controls = document.getElementById("songControls") || document.createElement("div");
-  controls.id = "songControls";
-  controls.style = "margin-top:10px;text-align:right;";
-
-  controls.innerHTML = `
-    <button id="editSongBtn" style="margin-right:8px;padding:6px 14px;border-radius:7px;border:1px solid #888;background:#ffc107;color:#222;font-weight:bold;cursor:pointer;">Editar</button>
-    <button id="copySongBtn" style="padding:6px 14px;border-radius:7px;border:1px solid #888;background:#313293;color:#fff;font-weight:bold;cursor:pointer;">Copiar</button>
-  `;
-  displayText.parentNode.insertBefore(controls, displayText.nextSibling);
-
-  document.getElementById("editSongBtn").onclick = () => showEditForm(song, key);
-  document.getElementById("copySongBtn").onclick = () => copySongText(song);
+    divLinea.innerHTML = contenido;
+    displayText.appendChild(divLinea);
+  }
 }
-
 // Copiar texto plano (sin HTML)
 function copySongText(song) {
   navigator.clipboard.writeText(song.text || "").then(() => {
