@@ -12,8 +12,8 @@
       font-family: 'Segoe UI', sans-serif;
       color: white;
       width: 100vw;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
 
     header {
@@ -48,27 +48,26 @@
       display: none;
     }
 
-    /* UNIFICADO: Apartados de letra responsive y fiel a espacios/saltos */
-    #display, #displayTitle, #displayText, pre {
+    /* SOLO EL AREA PARA LETRA Y ACORDES */
+    #displayText {
       font-family: inherit;
-      font-size: 13px;
-      line-height: 1.3;
-      white-space: pre;         /* Respeta todos los espacios y saltos de línea */
-      overflow-x: auto;         /* Scroll horizontal si la línea es muy larga */
-      max-width: 100vw;
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre;           /* ¡Espacios y saltos fieles! */
+      overflow-x: auto;
       width: 100vw;
-      padding: 8px 4vw;
+      min-height: 180px;
+      padding: 16px 4vw;
       box-sizing: border-box;
-      word-break: break-word;
       background: #fff;
       color: #313293;
       border-radius: 16px;
       box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
-      margin: 20px auto 0 auto;
+      margin: 24px auto 0 auto;
       text-align: left;
+      word-break: normal;
     }
 
-    /* Estilo para acordes */
     .chord {
       color: #00ffff;
       font-weight: bold;
@@ -101,15 +100,15 @@
     }
 
     @media (max-width: 900px) {
-      #display, #displayTitle, #displayText, pre {
+      #displayText {
         font-size: 12px;
-        padding: 6px 2vw;
+        padding: 10px 2vw;
       }
     }
     @media (max-width: 700px) {
-      #display, #displayTitle, #displayText, pre {
+      #displayText {
         font-size: 11px;
-        padding: 4px 1vw;
+        padding: 8px 1vw;
       }
       .btn-back { max-width: 99vw; }
     }
@@ -140,10 +139,8 @@
     </div>
   </div>
 
-  <div id="display">
-    <div id="displayTitle"></div>
-    <pre id="displayText">Selecciona una alabanza para ver la letra.</pre>
-  </div>
+  <div id="displayTitle" style="text-align:center;margin-top:16px"></div>
+  <pre id="displayText">Selecciona una alabanza para ver la letra.</pre>
 
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
 
