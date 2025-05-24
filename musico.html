@@ -48,33 +48,33 @@
       display: none;
     }
 
-    #display {
-      padding: 10px 12px;
+    /* UNIFICADO: Apartados de letra responsive */
+    #display, #displayTitle, #displayText, pre {
+      font-family: inherit;
+      font-size: 13px;
+      min-width: 0;
+      min-height: 0;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      text-overflow: ellipsis;
+      max-width: 100vw;
       width: 100vw;
-      height: 55vh;
-      overflow: auto; /* Cambiado para permitir scroll */
-    }
-
-    #displayTitle {
-      font-weight: bold;
-      margin-bottom: 8px;
-      font-size: 16px;
-      text-align: center;
-    }
-
-    #displayText {
-      font-size: 14px;
-      white-space: pre-wrap;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      margin: 0 auto;
-      width: 96vw;
-      color: #fff;
+      padding: 8px 4vw;
+      box-sizing: border-box;
+      word-break: break-all;
+      background: #fff;
+      color: #313293;
+      border-radius: 16px;
+      box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
+      margin: 20px auto 0 auto;
+      text-align: left;
     }
 
     /* Estilo para acordes */
     .chord {
-      color: #00ffff; /* Color distintivo (azul claro) */
+      color: #00ffff;
       font-weight: bold;
     }
 
@@ -91,8 +91,8 @@
       max-width: 230px;
       text-align: center;
       box-shadow: 0 2px 8px #2223a322;
+      border: none;
     }
-
     .btn-back:hover {
       background-color: #45a049;
     }
@@ -102,6 +102,20 @@
       margin-top: 20px;
       font-size: 11px;
       opacity: 0.6;
+    }
+
+    @media (max-width: 900px) {
+      #display, #displayTitle, #displayText, pre {
+        font-size: 12px;
+        padding: 6px 2vw;
+      }
+    }
+    @media (max-width: 700px) {
+      #display, #displayTitle, #displayText, pre {
+        font-size: 11px;
+        padding: 4px 1vw;
+      }
+      .btn-back { max-width: 99vw; }
     }
   </style>
 </head>
@@ -135,7 +149,6 @@
     <pre id="displayText">Selecciona una alabanza para ver la letra.</pre>
   </div>
 
-  <!-- Botón de regresar al inicio -->
   <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
 
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
