@@ -38,27 +38,21 @@ function highlightChords(text) {
 function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
-  displayText.innerHTML = highlightChords(song.text || "");
+  displayText.innerHTML = formatSongHtml(song.text || "");
   ajustarFuenteLetra();
 }
 
-function ajustarFuenteLetra() {
-  const letraDiv = displayText;
-  if (!letraDiv) return;
-  let fontSize = 14; // Tamaño inicial de la fuente
-  letraDiv.style.fontSize = fontSize + "px";
-  const displayBox = display.getBoundingClientRect();
-  const titleHeight = displayTitle.offsetHeight;
+function formatSongHtml(texto) {
+  // Primero resalta acordes
+  let resaltado = highlightChords(texto);
 
-  while (
-    (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width) &&
-    fontSize > 8
-  ) {
-    fontSize--;
-    letraDiv.style.fontSize = fontSize + "px";
-  }
+  // Luego, reemplaza espacios por &nbsp; y saltos de línea por <br>
+  resaltado = resaltado
+    .replace(/ /g, "&nbsp;")
+    .replace(/\n/g, "<br>");
+
+  return resaltado;
 }
-
 function loadSongs() {
   onValue(ref(db, "songsMusico"), (snapshot) => {
     allSongs = snapshot.val() || {};
