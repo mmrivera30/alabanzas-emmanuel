@@ -8,8 +8,8 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
       color: white;
       width: 100vw;
       min-height: 100vh;
@@ -48,24 +48,16 @@
       display: none;
     }
 
-    /* SOLO EL AREA PARA LETRA Y ACORDES */
     #displayText {
-      font-family: inherit;
-      font-size: 14px;
-      line-height: 1.4;
-      white-space: pre !important;  /* Forzamos que respete los espacios */
-      overflow-x: auto;
-      width: 100vw;
-      min-height: 180px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
       padding: 16px 4vw;
+      white-space: pre;
+      overflow-x: auto;
+      width: 100%;
       box-sizing: border-box;
       background: transparent;
-      color: #ffffff;
-      border-radius: 0;
-      box-shadow: none;
-      margin: 24px auto 0 auto;
-      text-align: left;
-      word-break: normal;
+      color: white;
     }
 
     .chord {
@@ -75,42 +67,30 @@
 
     .btn-back {
       display: block;
-      margin: 20px auto 0 auto;
+      margin: 20px auto;
       padding: 10px 16px;
       background-color: #4CAF50;
-      color: #fff;
-      text-decoration: none;
+      color: white;
+      border: none;
       border-radius: 8px;
-      font-size: 14px;
       font-weight: bold;
       max-width: 230px;
       text-align: center;
-      box-shadow: 0 2px 8px #2223a322;
-      border: none;
     }
+
     .btn-back:hover {
       background-color: #45a049;
     }
 
     footer {
       text-align: center;
-      margin-top: 20px;
       font-size: 11px;
       opacity: 0.6;
+      margin-top: 20px;
     }
 
-    @media (max-width: 900px) {
-      #displayText {
-        font-size: 12px;
-        padding: 10px 2vw;
-      }
-    }
-    @media (max-width: 700px) {
-      #displayText {
-        font-size: 11px;
-        padding: 8px 1vw;
-      }
-      .btn-back { max-width: 99vw; }
+    .linea {
+      display: block;
     }
   </style>
 </head>
@@ -140,11 +120,12 @@
   </div>
 
   <div id="displayTitle" style="text-align:center;margin-top:16px"></div>
-<div id="displayText" style="white-space: pre-wrap; font-family: 'Segoe UI', sans-serif; background: transparent; color: #ffffff;">Selecciona una alabanza para ver la letra.</div>
-  <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
+  <div id="displayText">Selecciona una alabanza para ver la letra.</div>
 
+  <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
   <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
 
   <script type="module" src="./scripts/musico.js"></script>
 </body>
 </html>
+
