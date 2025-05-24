@@ -43,9 +43,9 @@ function showMessage(msg, success = true) {
 // Regex para acordes típicos: D, G, Bm, A, Am, Em, F, etc.
 function highlightChords(text) {
   return text.replace(
-    /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
+    /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\\d*)/g,
     (match, p1, p2) => {
-      if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
+      if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\\d*$/.test(p2)) {
         return p1 + `<span class="chord">${p2}</span>`;
       }
       return match;
@@ -64,18 +64,22 @@ function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
 
-  // 1. Resalta acordes con HTML
-  let resaltado = highlightChords(song.text || "");
+  // Mantener el texto original sin modificar el formato
+  displayText.innerHTML = song.text || "";
 
-  // 2. Conserva espacios y saltos de línea fielmente:
-  //    - Espacios: &nbsp; (incluida indentación al inicio de línea)
-  //    - Saltos de línea: <br>
-  resaltado = resaltado
-    .split('\n').map(line =>
-      line.replace(/ /g, '&nbsp;')
-    ).join('<br>');
-
-  displayText.innerHTML = resaltado;
+  // Aplicar estilos para resaltar acordes manteniendo el formato original
+  const textContent = displayText.innerHTML;
+  const textWithChords = textContent.replace(
+    /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
+    (match, p1, p2) => {
+      if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
+        return p1 + `<span class="chord">${p2}</span>`;
+      }
+      return match;
+    }
+  );
+  
+  displayText.innerHTML = textWithChords;
 
   // Mostrar botones de acción si es admin
   const controls = document.getElementById("songControls") || document.createElement("div");
