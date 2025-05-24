@@ -43,6 +43,7 @@ function showMessage(msg, success = true) {
 function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
+
   const texto = song.text || "";
   const lineas = texto.split("\n");
   displayText.innerHTML = "";
@@ -51,17 +52,17 @@ function renderSong(song, key) {
     const divLinea = document.createElement("div");
     divLinea.className = "linea";
 
-    let contenido = linea.replace(/ /g, "\u00A0");
-
-    contenido = contenido.replace(
-      /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
-      (match, p1, p2) => {
-        if (/^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
-          return p1 + `<span class="chord">${p2}</span>`;
+    // Mantener espacios sin usar nbsp, para permitir wrap
+    let contenido = linea
+      .replace(
+        /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
+        (match, p1, p2) => {
+          if (/^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
+            return p1 + `<span class="chord">${p2}</span>`;
+          }
+          return match;
         }
-        return match;
-      }
-    );
+      );
 
     divLinea.innerHTML = contenido;
     displayText.appendChild(divLinea);
