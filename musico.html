@@ -48,13 +48,13 @@
       display: none;
     }
 
-    /* UNIFICADO: Apartados de letra responsive */
+    /* UNIFICADO: Apartados de letra responsive y fiel a espacios/saltos */
     #display, #displayTitle, #displayText, pre {
       font-family: inherit;
       font-size: 13px;
       line-height: 1.3;
-      white-space: pre-wrap;      /* Permite saltos de línea */
-      overflow-x: auto;           /* Scroll solo si alguna línea es muy larga */
+      white-space: pre;         /* Respeta todos los espacios y saltos de línea */
+      overflow-x: auto;         /* Scroll horizontal si la línea es muy larga */
       max-width: 100vw;
       width: 100vw;
       padding: 8px 4vw;
