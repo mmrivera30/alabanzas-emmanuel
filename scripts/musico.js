@@ -44,25 +44,27 @@ function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
 
-  // Convertir espacios normales a espacios no rompibles y preservar formato
-  let text = song.text || "";
-  text = text.split('\n').map(line => {
-    return line.replace(/ /g, '\u00A0');
-  }).join('\n');
-
-  // Resaltar acordes manteniendo los espacios no rompibles
-  const textWithChords = text.replace(
-    /(\u00A0|^)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
-    (match, space, chord) => {
-      if (chord.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(chord)) {
-        return space + `<span class="chord">${chord}</span>`;
+  // 1. Resalta acordes con HTML
+  let resaltado = song.text || "";
+  resaltado = resaltado.replace(
+    /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
+    (match, p1, p2) => {
+      if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
+        return p1 + `<span class="chord">${p2}</span>`;
       }
       return match;
     }
   );
 
-  // Asignar el contenido preservando el formato
-  displayText.innerHTML = textWithChords;
+  // 2. Conserva espacios y saltos de línea fielmente:
+  //    - Espacios: &nbsp; (incluida indentación al inicio de línea)
+  //    - Saltos de línea: <br>
+  resaltado = resaltado
+    .split('\n').map(line =>
+      line.replace(/ /g, '&nbsp;')
+    ).join('<br>');
+
+  displayText.innerHTML = resaltado;
 
   // Mostrar botones de acción si es admin
   const controls = document.getElementById("songControls") || document.createElement("div");
