@@ -22,9 +22,7 @@ let todasLasAlabanzas = {};
 const lista = document.getElementById("listaAlabanzas");
 
 window.login = () => {
-  signInWithPopup(auth, provider).catch(e => {
-    alert("Error al iniciar sesión: " + e.message);
-  });
+  signInWithPopup(auth, provider).catch(e => alert("Error al iniciar sesión: " + e.message));
 };
 
 onAuthStateChanged(auth, user => {
@@ -50,22 +48,16 @@ function filtrarSoloLetras(texto) {
 function mostrarAlabanzas() {
   lista.innerHTML = "";
   Object.entries(todasLasAlabanzas).forEach(([key, { title, text }]) => {
-    const letraSinAcordes = filtrarSoloLetras(text || ""); // Generar texto sin acordes
-
+    const letraSinAcordes = filtrarSoloLetras(text || "");
     const card = document.createElement("div");
     card.className = "alabanza-card";
 
-    // Mostrar solo letras sin acordes
     card.innerHTML = `
       <div class="card-header">
-        <h2>${title}</h2>
-      </div>
-      <div class="card-body">
-        <p><strong>Letra:</strong></p>
-        <textarea readonly rows="5">${letraSinAcordes}</textarea>
+        <h2 class="preview-link" data-key="${key}">${title}</h2>
       </div>
       <div class="card-footer">
-        <button class="btn-edit" data-key="${key}" data-type="letras">✏️ Editar</button>
+        <button class="btn-edit" data-key="${key}">✏️ Editar</button>
         <button class="btn-delete" data-key="${key}">🗑️ Eliminar</button>
       </div>
     `;
@@ -73,7 +65,6 @@ function mostrarAlabanzas() {
     lista.appendChild(card);
   });
 
-  // Vincular eventos a los botones
   document.querySelectorAll('.btn-edit').forEach(btn => {
     btn.addEventListener('click', () => abrirPopUpEditar(btn.dataset.key));
   });
@@ -81,12 +72,32 @@ function mostrarAlabanzas() {
   document.querySelectorAll('.btn-delete').forEach(btn => {
     btn.addEventListener('click', () => confirmarEliminar(btn.dataset.key));
   });
+
+  document.querySelectorAll('.preview-link').forEach(h2 => {
+    h2.addEventListener('click', () => {
+      const song = todasLasAlabanzas[h2.dataset.key];
+      const soloLetra = filtrarSoloLetras(song.text || "");
+      const popUpHtml = `
+        <div class="popup-overlay">
+          <div class="popup-container">
+            <h2>${song.title}</h2>
+            <pre style="text-align:left; font-size:13px; line-height:1.4; white-space:pre-wrap; background:#f0f0f0; padding:10px; border-radius:8px; color:#333;">${soloLetra}</pre>
+            <div class="popup-buttons">
+              <button id="cancelVista" class="cancel-btn">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', popUpHtml);
+      agregarEstilos();
+      document.getElementById('cancelVista').addEventListener('click', cerrarPopUp);
+    });
+  });
 }
 
 function abrirPopUpEditar(key) {
   const song = todasLasAlabanzas[key];
-  const textoInicial = filtrarSoloLetras(song.text || ""); // Solo letras sin acordes
-
+  const textoInicial = filtrarSoloLetras(song.text || "");
   const popUpHtml = `
     <div class="popup-overlay">
       <div class="popup-container">
@@ -126,7 +137,6 @@ function guardarEdicion(key) {
   }
 
   set(ref(db, 'songsCantante/' + key), { title: nuevoTitulo, text: nuevoTexto });
-
   alert("Cambios guardados correctamente.");
   cerrarPopUp();
   cargarAlabanzas();
@@ -184,13 +194,7 @@ function agregarEstilos() {
       color: #313293;
       margin: 0;
       text-align: center;
-    }
-    .card-body textarea {
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-      resize: none;
+      cursor: pointer;
     }
     .card-footer {
       display: flex;
@@ -221,10 +225,8 @@ function agregarEstilos() {
     }
     .popup-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
@@ -259,7 +261,8 @@ function agregarEstilos() {
     .popup-buttons button:hover {
       opacity: 0.9;
     }
-    .popup-buttons #saveChanges {
+    .popup-buttons #saveChanges,
+    .cancel-btn {
       background-color: #313293;
       color: white;
     }
@@ -270,3 +273,4 @@ function agregarEstilos() {
   `;
   document.head.appendChild(estilo);
 }
+
