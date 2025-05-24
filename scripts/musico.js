@@ -40,45 +40,28 @@ function showMessage(msg, success = true) {
   setTimeout(() => { messageBox.style.display = "none"; }, 1800);
 }
 
-// Regex para acordes típicos: D, G, Bm, A, Am, Em, F, etc.
-function highlightChords(text) {
-  return text.replace(
-    /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\\d*)/g,
-    (match, p1, p2) => {
-      if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\\d*$/.test(p2)) {
-        return p1 + `<span class="chord">${p2}</span>`;
-      }
-      return match;
-    }
-  );
-}
-
-// Copiar texto plano (sin HTML)
-function copySongText(song) {
-  navigator.clipboard.writeText(song.text || "").then(() => {
-    showMessage("Alabanza copiada al portapapeles");
-  });
-}
-
 function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
 
-  // Mantener el texto original sin modificar el formato
-  displayText.innerHTML = song.text || "";
+  // Convertir espacios normales a espacios no rompibles y preservar formato
+  let text = song.text || "";
+  text = text.split('\n').map(line => {
+    return line.replace(/ /g, '\u00A0');
+  }).join('\n');
 
-  // Aplicar estilos para resaltar acordes manteniendo el formato original
-  const textContent = displayText.innerHTML;
-  const textWithChords = textContent.replace(
-    /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
-    (match, p1, p2) => {
-      if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
-        return p1 + `<span class="chord">${p2}</span>`;
+  // Resaltar acordes manteniendo los espacios no rompibles
+  const textWithChords = text.replace(
+    /(\u00A0|^)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
+    (match, space, chord) => {
+      if (chord.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(chord)) {
+        return space + `<span class="chord">${chord}</span>`;
       }
       return match;
     }
   );
-  
+
+  // Asignar el contenido preservando el formato
   displayText.innerHTML = textWithChords;
 
   // Mostrar botones de acción si es admin
@@ -96,8 +79,14 @@ function renderSong(song, key) {
   document.getElementById("copySongBtn").onclick = () => copySongText(song);
 }
 
+// Copiar texto plano (sin HTML)
+function copySongText(song) {
+  navigator.clipboard.writeText(song.text || "").then(() => {
+    showMessage("Alabanza copiada al portapapeles");
+  });
+}
+
 function showEditForm(song, key) {
-  // Muestra el formulario con los valores actuales
   addForm.style.display = "block";
   inputTitle.value = song.title;
   inputText.value = song.text;
