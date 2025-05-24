@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -18,7 +18,6 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 const MUSICO_UIDS = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
-const display = document.getElementById("display");
 const displayTitle = document.getElementById("displayTitle");
 const displayText = document.getElementById("displayText");
 const songSelector = document.getElementById("songSelectorAdmin");
@@ -30,35 +29,38 @@ const adminPanel = document.getElementById("adminPanel");
 let allSongs = {};
 let currentKey = null;
 
+// Regex para acordes típicos: D, G, Bm, A, Am, Em, F, etc.
 function highlightChords(text) {
-  // Puedes personalizar esta regex según tu formato de acordes
-  // Aquí detecta: D, G, Bm, A, Am, Em, F, etc (mayúsculas, opcional m, 7, etc.)
+  // Resalta SOLO los acordes que están al comienzo de la línea o seguidos por espacios.
+  // Evita resaltar palabras normales por accidente.
   return text.replace(
-    /\b([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)\b/g,
-    '<span class="chord">$1</span>'
+    /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
+    (match, p1, p2) => {
+      // Solo resalta si es acorde válido y no está vacío
+      if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
+        return p1 + `<span class="chord">${p2}</span>`;
+      }
+      return match;
+    }
   );
 }
 
 function renderSong(song, key) {
   currentKey = key;
   displayTitle.textContent = song.title;
-  displayText.innerHTML = formatSongHtml(song.text || "");
-  ajustarFuenteLetra();
-}
 
-function formatSongHtml(texto) {
-  // 1. Resalta acordes
-  let resaltado = highlightChords(texto);
+  // 1. Resalta acordes con HTML
+  let resaltado = highlightChords(song.text || "");
 
-  // 2. Reemplaza espacios por &nbsp; y saltos de línea por <br>
-  // Para no romper los acordes resaltados, primero reemplaza espacios que no estén dentro de las etiquetas
-  // Usamos un truco con split para no afectar el HTML de los acordes
+  // 2. Conserva espacios y saltos de línea fielmente:
+  //    - Espacios: &nbsp; (incluida indentación al inicio de línea)
+  //    - Saltos de línea: <br>
   resaltado = resaltado
     .split('\n').map(line =>
       line.replace(/ /g, '&nbsp;')
     ).join('<br>');
 
-  return resaltado;
+  displayText.innerHTML = resaltado;
 }
 
 function loadSongs() {
@@ -128,22 +130,5 @@ window.addSong = () => {
   });
 };
 
-window.addEventListener("resize", ajustarFuenteLetra);
-
-// -------- OPCIONAL: Adaptar el ajuste de fuente para que funcione con HTML dinámico ---------
-function ajustarFuenteLetra() {
-  const letraDiv = displayText;
-  if (!letraDiv) return;
-  let fontSize = 14; // Tamaño inicial de la fuente
-  letraDiv.style.fontSize = fontSize + "px";
-  const displayBox = display.getBoundingClientRect();
-  const titleHeight = displayTitle.offsetHeight;
-
-  while (
-    (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width) &&
-    fontSize > 8
-  ) {
-    fontSize--;
-    letraDiv.style.fontSize = fontSize + "px";
-  }
-}
+// Puedes eliminar la función de ajuste de fuente si usas <pre> y CSS responsive.
+// Si necesitas ajustar el tamaño de fuente dinámicamente según el contenedor, puedes volver a agregarla.
