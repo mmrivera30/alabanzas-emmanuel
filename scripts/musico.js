@@ -31,8 +31,12 @@ let allSongs = {};
 let currentKey = null;
 
 function highlightChords(text) {
-  const chordRegex = /\[([A-G#bmajmin7]+)\]/g; // Identificar acordes como [G], [Am]
-  return text.replace(chordRegex, '<span class="chord">[$1]</span>');
+  // Puedes personalizar esta regex según tu formato de acordes
+  // Aquí detecta: D, G, Bm, A, Am, Em, F, etc (mayúsculas, opcional m, 7, etc.)
+  return text.replace(
+    /\b([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)\b/g,
+    '<span class="chord">$1</span>'
+  );
 }
 
 function renderSong(song, key) {
@@ -43,16 +47,20 @@ function renderSong(song, key) {
 }
 
 function formatSongHtml(texto) {
-  // Primero resalta acordes
+  // 1. Resalta acordes
   let resaltado = highlightChords(texto);
 
-  // Luego, reemplaza espacios por &nbsp; y saltos de línea por <br>
+  // 2. Reemplaza espacios por &nbsp; y saltos de línea por <br>
+  // Para no romper los acordes resaltados, primero reemplaza espacios que no estén dentro de las etiquetas
+  // Usamos un truco con split para no afectar el HTML de los acordes
   resaltado = resaltado
-    .replace(/ /g, "&nbsp;")
-    .replace(/\n/g, "<br>");
+    .split('\n').map(line =>
+      line.replace(/ /g, '&nbsp;')
+    ).join('<br>');
 
   return resaltado;
 }
+
 function loadSongs() {
   onValue(ref(db, "songsMusico"), (snapshot) => {
     allSongs = snapshot.val() || {};
@@ -121,3 +129,21 @@ window.addSong = () => {
 };
 
 window.addEventListener("resize", ajustarFuenteLetra);
+
+// -------- OPCIONAL: Adaptar el ajuste de fuente para que funcione con HTML dinámico ---------
+function ajustarFuenteLetra() {
+  const letraDiv = displayText;
+  if (!letraDiv) return;
+  let fontSize = 14; // Tamaño inicial de la fuente
+  letraDiv.style.fontSize = fontSize + "px";
+  const displayBox = display.getBoundingClientRect();
+  const titleHeight = displayTitle.offsetHeight;
+
+  while (
+    (letraDiv.scrollHeight > (display.clientHeight - titleHeight - 10) || letraDiv.scrollWidth > displayBox.width) &&
+    fontSize > 8
+  ) {
+    fontSize--;
+    letraDiv.style.fontSize = fontSize + "px";
+  }
+}
