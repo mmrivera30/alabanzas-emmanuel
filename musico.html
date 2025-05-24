@@ -48,17 +48,23 @@
       display: none;
     }
 
-    #displayText {
-      font-family: 'Courier New', monospace;
-      font-size: 13px;
-      padding: 16px 4vw;
-      white-space: pre;
-      overflow-x: auto;
-      width: 100%;
-      box-sizing: border-box;
-      background: transparent;
-      color: white;
-    }
+  #displayText.letra-renderizada {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  padding: 16px 4vw;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-width: 100vw;
+  box-sizing: border-box;
+  color: white;
+}
+.linea {
+  display: block;
+  width: 100%;
+  overflow-wrap: break-word;
+}
 
     .chord {
       color: #00ffff;
