@@ -32,8 +32,7 @@
       margin: 4px 0 10px;
     }
 
-    #display, #displayTitle, #displayText, pre {
-      font-family: 'Courier New', monospace;
+    #display {
       font-size: 10px;
       line-height: 1.3;
       white-space: pre-wrap;
@@ -47,7 +46,19 @@
       background: transparent;
       color: white;
       text-align: left;
-      border: none;
+    }
+
+    pre {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .chord {
+      color: #00ffff;
+      font-weight: bold;
     }
 
     .btn-back {
@@ -82,21 +93,6 @@
       opacity: 0.7;
       text-shadow: 0 1px 6px #313293;
     }
-
-    @media (max-width: 900px) {
-      #display, #displayTitle, #displayText, pre {
-        font-size: 10px;
-        padding: 6px 2vw;
-      }
-    }
-
-    @media (max-width: 700px) {
-      #display, #displayTitle, #displayText, pre {
-        font-size: 10px;
-        padding: 4px 1vw;
-      }
-      .btn-back { max-width: 99vw; }
-    }
   </style>
 </head>
 <body>
@@ -107,15 +103,14 @@
     <h1>Proyección del Músico</h1>
   </header>
 
-  <div id="display">
-    <div id="displayTitle">Cargando...</div>
-    <pre id="displayText">Esperando selección...</pre>
-    <a class="btn-back" href="index.html">🔙 Volver al inicio</a>
-    <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
-  </div>
+  <div id="display">Cargando...</div>
+
+  <a class="btn-back" href="index.html">🔙 Volver al inicio</a>
+  <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
 
   <script type="module" src="./scripts/pantalla-musico.js"></script>
 </body>
 </html>
+
 
 
