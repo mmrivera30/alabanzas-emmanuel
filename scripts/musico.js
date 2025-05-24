@@ -25,24 +25,39 @@ const addForm = document.getElementById("addForm");
 const inputTitle = document.getElementById("songTitle");
 const inputText = document.getElementById("songText");
 const adminPanel = document.getElementById("adminPanel");
+const messageBox = document.createElement("div");
+messageBox.id = "messageBox";
+messageBox.style.cssText = "display:none;position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#4caf50;color:white;padding:10px 30px;border-radius:8px;z-index:9999;font-size:16px;box-shadow:0 2px 12px #2223a355;";
+document.body.appendChild(messageBox);
 
 let allSongs = {};
 let currentKey = null;
 
+function showMessage(msg, success = true) {
+  messageBox.textContent = msg;
+  messageBox.style.background = success ? "#4caf50" : "#e74c3c";
+  messageBox.style.display = "block";
+  setTimeout(() => { messageBox.style.display = "none"; }, 1800);
+}
+
 // Regex para acordes típicos: D, G, Bm, A, Am, Em, F, etc.
 function highlightChords(text) {
-  // Resalta SOLO los acordes que están al comienzo de la línea o seguidos por espacios.
-  // Evita resaltar palabras normales por accidente.
   return text.replace(
     /(^|\s)([A-G][#b]?m?(?:aj|min|dim|aug|sus|add)?\d*)/g,
     (match, p1, p2) => {
-      // Solo resalta si es acorde válido y no está vacío
       if (p2.trim() && /^[A-G][#b]?m?(aj|min|dim|aug|sus|add)?\d*$/.test(p2)) {
         return p1 + `<span class="chord">${p2}</span>`;
       }
       return match;
     }
   );
+}
+
+// Copiar texto plano (sin HTML)
+function copySongText(song) {
+  navigator.clipboard.writeText(song.text || "").then(() => {
+    showMessage("Alabanza copiada al portapapeles");
+  });
 }
 
 function renderSong(song, key) {
@@ -61,6 +76,36 @@ function renderSong(song, key) {
     ).join('<br>');
 
   displayText.innerHTML = resaltado;
+
+  // Mostrar botones de acción si es admin
+  const controls = document.getElementById("songControls") || document.createElement("div");
+  controls.id = "songControls";
+  controls.style = "margin-top:10px;text-align:right;";
+
+  controls.innerHTML = `
+    <button id="editSongBtn" style="margin-right:8px;padding:6px 14px;border-radius:7px;border:1px solid #888;background:#ffc107;color:#222;font-weight:bold;cursor:pointer;">Editar</button>
+    <button id="copySongBtn" style="padding:6px 14px;border-radius:7px;border:1px solid #888;background:#313293;color:#fff;font-weight:bold;cursor:pointer;">Copiar</button>
+  `;
+  displayText.parentNode.insertBefore(controls, displayText.nextSibling);
+
+  document.getElementById("editSongBtn").onclick = () => showEditForm(song, key);
+  document.getElementById("copySongBtn").onclick = () => copySongText(song);
+}
+
+function showEditForm(song, key) {
+  // Muestra el formulario con los valores actuales
+  addForm.style.display = "block";
+  inputTitle.value = song.title;
+  inputText.value = song.text;
+  addForm.dataset.editing = key;
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function hideEditForm() {
+  addForm.style.display = "none";
+  inputTitle.value = "";
+  inputText.value = "";
+  addForm.dataset.editing = "";
 }
 
 function loadSongs() {
@@ -75,7 +120,7 @@ function loadSongs() {
     });
   }, (error) => {
     console.error("Error al cargar las alabanzas:", error);
-    alert("No se pudieron cargar las alabanzas. Verifica la conexión a Firebase.");
+    showMessage("No se pudieron cargar las alabanzas. Verifica la conexión a Firebase.", false);
   });
 }
 
@@ -88,12 +133,14 @@ songSelector?.addEventListener("change", () => {
   } else {
     displayTitle.textContent = "";
     displayText.textContent = "Selecciona una alabanza.";
+    const controls = document.getElementById("songControls");
+    if (controls) controls.remove();
   }
 });
 
 window.login = () => {
   signInWithPopup(auth, provider).catch((error) =>
-    alert("Error al iniciar sesión: " + error.message)
+    showMessage("Error al iniciar sesión: " + error.message, false)
   );
 };
 
@@ -104,7 +151,7 @@ onAuthStateChanged(auth, (user) => {
       adminPanel.style.display = "block";
       loadSongs();
     } else {
-      alert("Acceso restringido al músico.");
+      showMessage("Acceso restringido al músico.", false);
     }
     if (loginButton) loginButton.style.display = "none";
   } else {
@@ -113,22 +160,22 @@ onAuthStateChanged(auth, (user) => {
 });
 
 window.showAddForm = () => {
+  hideEditForm();
   addForm.style.display = "block";
 };
 
 window.addSong = () => {
   const title = inputTitle.value.trim();
   const text = inputText.value.trim();
-  if (!title || !text) return alert("Completa todos los campos.");
-  const key = title.toLowerCase().replace(/\s+/g, "_");
+  if (!title || !text) return showMessage("Completa todos los campos.", false);
+
+  const editingKey = addForm.dataset.editing;
+  const key = editingKey || title.toLowerCase().replace(/\s+/g, "_");
+
   set(ref(db, "songsMusico/" + key), { title, text }).then(() => {
-    inputTitle.value = "";
-    inputText.value = "";
-    addForm.style.display = "none";
+    hideEditForm();
     renderSong({ title, text }, key);
     songSelector.value = key;
+    showMessage(editingKey ? "Alabanza editada con éxito" : "Alabanza guardada con éxito");
   });
 };
-
-// Puedes eliminar la función de ajuste de fuente si usas <pre> y CSS responsive.
-// Si necesitas ajustar el tamaño de fuente dinámicamente según el contenedor, puedes volver a agregarla.
