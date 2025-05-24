@@ -3,119 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pantalla Músico</title>
+  <title>Pantalla Cantante</title>
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
-      font-family: 'Courier New', monospace;
-      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
-      color: white;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      text-align: center;
-      padding: 8px 0;
-    }
-
-    .logo-inline {
-      height: 36px;
-      margin-bottom: 4px;
-    }
-
-    h1 {
-      font-size: 16px;
-      margin: 4px 0 10px;
-    }
-
-    #display, #displayTitle, #displayText, pre {
-      font-family: 'Courier New', monospace;
-      font-size: 10px;
-      line-height: 1.3;
-      white-space: pre-wrap;
-      overflow-x: hidden;
-      overflow-y: auto;
-      max-width: 100vw;
-      width: 100vw;
-      padding: 8px 4vw;
-      box-sizing: border-box;
-      word-break: break-word;
-      background: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefefe;
+      background-image: url('https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png');
+      background-repeat: no-repeat;
+      background-size: 30%;
+      background-position: center center;
+      background-attachment: fixed;
       color: #313293;
-      border-radius: 16px;
-      box-shadow: 0 0 12px #2223a322, 0 3px 14px #2223a322;
-      margin: 20px auto 0 auto;
-      text-align: left;
-    }
-
-    .btn-back {
-      display: block;
-      margin: 20px auto 0 auto;
-      padding: 8px 18px;
-      background: #9a6326;
-      color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      max-width: 190px;
-      font-size: 1rem;
-      text-align: center;
-      border: none;
-      font-weight: bold;
-      box-shadow: 0 2px 8px #2223a322;
-      transition: background 0.2s, color 0.2s;
-      cursor: pointer;
-      box-sizing: border-box;
-    }
-
-    .btn-back:hover {
-      background: #313293;
-      color: #fff;
-    }
-
-    footer {
-      margin-top: 28px;
-      text-align: center;
+      padding: 0.8em;
       font-size: 12px;
-      color: #fff;
-      opacity: 0.7;
-      text-shadow: 0 1px 6px #313293;
     }
-
-    @media (max-width: 900px) {
-      #display, #displayTitle, #displayText, pre {
-        font-size: 10px;
-        padding: 6px 2vw;
-      }
+    h1 { text-align: center; color: #313293; font-size: 18px; }
+    select, button, textarea, input {
+      width: 100%;
+      font-size: 12px;
+      margin: 5px 0;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #9a6326;
     }
-
-    @media (max-width: 700px) {
-      #display, #displayTitle, #displayText, pre {
-        font-size: 10px;
-        padding: 4px 1vw;
-      }
-      .btn-back { max-width: 99vw; }
+    .chord { color: #9a6326; font-weight: bold; }
+    pre { white-space: pre-wrap; font-size: 12px; line-height: 1.2em; }
+    .admin { display: none; margin-top: 15px; }
+    #display {
+      margin-top: 15px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    }
+    a.button, .btn-back {
+      display: block;
+      margin: 8px auto;
+      padding: 7px 14px;
+      background-color: #313293;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 12px;
+      text-align: center;
+      max-width: 230px;
+    }
+    a.button:hover, .btn-back:hover {
+      background-color: #9a6326;
+    }
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 11px;
+      color: #888;
+    }
+    .logo-inline {
+      vertical-align: middle;
+      width: 40px;
+      margin-right: 8px;
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <img src="https://i.postimg.cc/bYn9gght/Fotograf-a-Horizontal-Vertical-20250519-232932-0000.png"
-         class="logo-inline" alt="Logo" />
-    <h1>Proyección del Músico</h1>
-  </header>
-
-  <div id="display">
-    <div id="displayTitle">Cargando...</div>
-    <pre id="displayText">Esperando selección...</pre>
-    <a class="btn-back" href="index.html">🔙 Volver al inicio</a>
-    <footer>© 2025 Templo Bíblico Bautista Dios con Nosotros</footer>
-  </div>
-
-  <script type="module" src="./scripts/pantalla-musico.js"></script>
+  
+  <h1>Proyección Cantante</h1>
+  
+  <div id='display'>Cargando alabanza...</div>
+  
+  <a class="btn-back" href="index.html">⬅ Volver al inicio</a>
+  <script type="module" src="./scripts/pantalla-cantante.js"></script>
 </body>
 </html>
+
