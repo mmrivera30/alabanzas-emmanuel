@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -22,27 +22,103 @@
     select {
       display: block;
       margin: 0 auto 20px auto;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      border: 1px solid #9a6326;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 16px;
+      border: none;
       max-width: 300px;
       width: 100%;
+      background: white;
+      color: #313293;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .alabanza-card {
+      background: #fff;
+      color: #313293;
+      border-radius: 14px;
+      padding: 18px;
+      margin: 14px auto;
+      max-width: 680px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .alabanza-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      flex-grow: 1;
+    }
+
+    .badge {
+      background: #e0e0e0;
+      color: #333;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-edit, .btn-delete {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background-color: #43a047;
+    }
+
+    .btn-delete {
+      background-color: #e53935;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background-color: #c62828;
     }
 
     .btn-back {
       display: block;
-      margin: 20px auto 0 auto;
-      padding: 10px 16px;
+      margin: 30px auto 10px auto;
+      padding: 12px 20px;
       background-color: #313293;
       color: #fff;
       text-decoration: none;
-      border-radius: 8px;
-      font-size: 14px;
+      border-radius: 10px;
+      font-size: 16px;
       font-weight: bold;
-      max-width: 300px;
+      max-width: 250px;
       text-align: center;
-      box-shadow: 0 2px 8px #2223a322;
+      box-shadow: 0 4px 12px #2223a355;
       border: none;
       cursor: pointer;
     }
@@ -52,10 +128,10 @@
     }
 
     footer {
-      margin-top: 30px;
+      margin-top: 20px;
       text-align: center;
       font-size: 12px;
-      color: #ccc;
+      color: #eee;
     }
   </style>
 </head>
@@ -64,9 +140,9 @@
   <h1>Lista de Alabanzas</h1>
 
   <select id="filtroTipo">
-    <option value="todas">Mostrar todas</option>
-    <option value="letras">Solo letras</option>
-    <option value="acordes">Solo acordes</option>
+    <option value="todas">🎵 Mostrar todas</option>
+    <option value="letras">🎤 Solo letras</option>
+    <option value="acordes">🎸 Solo acordes</option>
   </select>
 
   <div id="listaAlabanzas">Cargando...</div>
