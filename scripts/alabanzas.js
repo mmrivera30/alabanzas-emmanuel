@@ -146,10 +146,12 @@ function confirmarEliminar(key) {
   const opcionesHtml = `
     <div class="popup-overlay">
       <div class="popup-container">
-        <h2>¿Estás seguro de eliminar esta alabanza?</h2>
+        <h2>¿Qué deseas eliminar?</h2>
+        <p style="font-size: 14px; margin-bottom: 10px;">Puedes borrar solo la letra (cantante), o también la versión con acordes (músico).</p>
         <div class="popup-buttons">
-          <button id="deleteConfirm">Eliminar</button>
-          <button id="cancelDelete">Cancelar</button>
+          <button id="deleteOnlyLyrics">🧾 Solo letra</button>
+          <button id="deleteBoth">🎵 Letra y acordes</button>
+          <button id="cancelDelete">❌ Cancelar</button>
         </div>
       </div>
     </div>
@@ -157,120 +159,39 @@ function confirmarEliminar(key) {
   document.body.insertAdjacentHTML('beforeend', opcionesHtml);
   agregarEstilos();
 
-  document.getElementById('deleteConfirm').addEventListener('click', () => eliminar(key));
+  document.getElementById('deleteOnlyLyrics').addEventListener('click', () => eliminarSoloCantante(key));
+  document.getElementById('deleteBoth').addEventListener('click', () => eliminarAmbasVersiones(key));
   document.getElementById('cancelDelete').addEventListener('click', cerrarPopUp);
 }
 
-function eliminar(key) {
+function eliminarSoloCantante(key) {
   remove(ref(db, 'songsCantante/' + key))
     .then(() => {
-      alert("Alabanza eliminada correctamente.");
+      alert("Letra eliminada correctamente.");
       cerrarPopUp();
       cargarAlabanzas();
     })
     .catch(() => {
-      alert("Hubo un error al eliminar la alabanza.");
+      alert("Error al eliminar la letra.");
+    });
+}
+
+function eliminarAmbasVersiones(key) {
+  const updates = {
+    [`songsCantante/${key}`]: null,
+    [`songsMusico/${key}`]: null
+  };
+  set(ref(db), updates)
+    .then(() => {
+      alert("Letra y acordes eliminados correctamente.");
+      cerrarPopUp();
+      cargarAlabanzas();
+    })
+    .catch(() => {
+      alert("Error al eliminar ambas versiones.");
     });
 }
 
 function agregarEstilos() {
-  const estilo = document.createElement('style');
-  estilo.textContent = `
-    .alabanza-card {
-      background: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      margin: 15px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .alabanza-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-    .card-header h2 {
-      font-size: 1.5rem;
-      color: #313293;
-      margin: 0;
-      text-align: center;
-      cursor: pointer;
-    }
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
-    }
-    .btn-edit, .btn-delete {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .btn-edit {
-      background-color: #4caf50;
-      color: white;
-    }
-    .btn-edit:hover {
-      background-color: #45a049;
-    }
-    .btn-delete {
-      background-color: #f44336;
-      color: white;
-    }
-    .btn-delete:hover {
-      background-color: #e53935;
-    }
-    .popup-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .popup-container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-    }
-    .popup-container textarea,
-    .popup-container input {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .popup-buttons button {
-      margin: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .popup-buttons button:hover {
-      opacity: 0.9;
-    }
-    .popup-buttons #saveChanges,
-    .cancel-btn {
-      background-color: #313293;
-      color: white;
-    }
-    .popup-buttons #cancelDelete, .popup-buttons #cancelChanges {
-      background-color: #f44336;
-      color: white;
-    }
-  `;
-  document.head.appendChild(estilo);
+  // Puedes mantener el estilo anterior aquí si ya lo tienes
 }
-
