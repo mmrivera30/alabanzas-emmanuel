@@ -18,8 +18,10 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 const UID_AUTORIZADO = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
-let todasLasAlabanzas = {};
+let letras = {};
+let acordes = {};
 const lista = document.getElementById("listaAlabanzas");
+const filtro = document.getElementById("filtroTipo");
 
 window.login = () => {
   signInWithPopup(auth, provider).catch(e => alert("Error al iniciar sesión: " + e.message));
@@ -27,171 +29,228 @@ window.login = () => {
 
 onAuthStateChanged(auth, user => {
   if (user?.uid === UID_AUTORIZADO) {
-    cargarAlabanzas();
+    cargarDatos();
   } else {
     alert("Acceso restringido.");
     window.location.href = "index.html";
   }
 });
 
-function cargarAlabanzas() {
+function cargarDatos() {
   onValue(ref(db, 'songsCantante'), snapshot => {
-    todasLasAlabanzas = snapshot.val() || {};
-    mostrarAlabanzas();
+    letras = snapshot.val() || {};
+    onValue(ref(db, 'songsMusico'), snap => {
+      acordes = snap.val() || {};
+      mostrarAlabanzas();
+    });
   });
 }
 
-function filtrarSoloLetras(texto) {
-  return texto.replace(/\[.*?\]/g, "").trim();
-}
+filtro?.addEventListener("change", mostrarAlabanzas);
 
 function mostrarAlabanzas() {
   lista.innerHTML = "";
-  Object.entries(todasLasAlabanzas).forEach(([key, { title, text }]) => {
-    const letraSinAcordes = filtrarSoloLetras(text || "");
+  const tipo = filtro.value;
+
+  const keys = new Set([
+    ...Object.keys(letras || {}),
+    ...Object.keys(acordes || {})
+  ]);
+
+  [...keys].forEach(key => {
+    const letra = letras[key];
+    const cancion = acordes[key];
+    const existeLetras = letra && letra.text;
+    const existeAcordes = cancion && cancion.text;
+
+    if ((tipo === "letras" && !existeLetras) ||
+        (tipo === "acordes" && !existeAcordes)) return;
+
     const card = document.createElement("div");
     card.className = "alabanza-card";
-
     card.innerHTML = `
       <div class="card-header">
-        <h2 class="preview-link" data-key="${key}">${title}</h2>
+        <h2>${letra?.title || cancion?.title || key}</h2>
+        <span class="badge">${existeLetras ? "🎤 Letras" : ""} ${existeAcordes ? "🎸 Acordes" : ""}</span>
       </div>
       <div class="card-footer">
-        <button class="btn-edit" data-key="${key}">✏️ Editar</button>
+        ${existeLetras ? `<button class="btn-edit" data-key="${key}">✏️ Editar</button>` : ""}
         <button class="btn-delete" data-key="${key}">🗑️ Eliminar</button>
       </div>
     `;
-
     lista.appendChild(card);
   });
 
   document.querySelectorAll('.btn-edit').forEach(btn => {
-    btn.addEventListener('click', () => abrirPopUpEditar(btn.dataset.key));
+    btn.onclick = () => abrirPopUpEditar(btn.dataset.key);
   });
 
   document.querySelectorAll('.btn-delete').forEach(btn => {
-    btn.addEventListener('click', () => confirmarEliminar(btn.dataset.key));
-  });
-
-  document.querySelectorAll('.preview-link').forEach(h2 => {
-    h2.addEventListener('click', () => {
-      const song = todasLasAlabanzas[h2.dataset.key];
-      const soloLetra = filtrarSoloLetras(song.text || "");
-      const popUpHtml = `
-        <div class="popup-overlay">
-          <div class="popup-container">
-            <h2>${song.title}</h2>
-            <pre style="text-align:left; font-size:13px; line-height:1.4; white-space:pre-wrap; background:#f0f0f0; padding:10px; border-radius:8px; color:#333;">${soloLetra}</pre>
-            <div class="popup-buttons">
-              <button id="cancelVista" class="cancel-btn">Cerrar</button>
-            </div>
-          </div>
-        </div>
-      `;
-      document.body.insertAdjacentHTML('beforeend', popUpHtml);
-      agregarEstilos();
-      document.getElementById('cancelVista').addEventListener('click', cerrarPopUp);
-    });
+    btn.onclick = () => confirmarEliminar(btn.dataset.key);
   });
 }
 
 function abrirPopUpEditar(key) {
-  const song = todasLasAlabanzas[key];
-  const textoInicial = filtrarSoloLetras(song.text || "");
-  const popUpHtml = `
+  const song = letras[key];
+  const textoInicial = (song?.text || "").replace(/\[.*?\]/g, "");
+  const html = `
     <div class="popup-overlay">
       <div class="popup-container">
         <h2>Editar Letras</h2>
-        <form id="editForm">
-          <label for="songTitle">Título</label>
-          <input type="text" id="songTitle" value="${song.title}" required>
-          <label for="songText">Texto</label>
-          <textarea id="songText" rows="10" required>${textoInicial}</textarea>
-          <div class="popup-buttons">
-            <button type="button" id="saveChanges">Guardar</button>
-            <button type="button" id="cancelChanges">Cancelar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML('beforeend', popUpHtml);
-  agregarEstilos();
-
-  document.getElementById('saveChanges').addEventListener('click', () => guardarEdicion(key));
-  document.getElementById('cancelChanges').addEventListener('click', cerrarPopUp);
-}
-
-function cerrarPopUp() {
-  const popUp = document.querySelector('.popup-overlay');
-  if (popUp) popUp.remove();
-}
-
-function guardarEdicion(key) {
-  const nuevoTitulo = document.getElementById("songTitle").value.trim();
-  const nuevoTexto = document.getElementById("songText").value.trim();
-
-  if (!nuevoTitulo || !nuevoTexto) {
-    alert("Completa todos los campos.");
-    return;
-  }
-
-  set(ref(db, 'songsCantante/' + key), { title: nuevoTitulo, text: nuevoTexto });
-  alert("Cambios guardados correctamente.");
-  cerrarPopUp();
-  cargarAlabanzas();
-}
-
-function confirmarEliminar(key) {
-  const opcionesHtml = `
-    <div class="popup-overlay">
-      <div class="popup-container">
-        <h2>¿Qué deseas eliminar?</h2>
-        <p style="font-size: 14px; margin-bottom: 10px;">Puedes borrar solo la letra (cantante), o también la versión con acordes (músico).</p>
+        <input id="songTitle" value="${song.title}" placeholder="Título" />
+        <textarea id="songText" rows="10">${textoInicial}</textarea>
         <div class="popup-buttons">
-          <button id="deleteOnlyLyrics">🧾 Solo letra</button>
-          <button id="deleteBoth">🎵 Letra y acordes</button>
-          <button id="cancelDelete">❌ Cancelar</button>
+          <button id="saveChanges">Guardar</button>
+          <button id="cancelChanges">Cancelar</button>
         </div>
       </div>
     </div>
   `;
-  document.body.insertAdjacentHTML('beforeend', opcionesHtml);
-  agregarEstilos();
+  document.body.insertAdjacentHTML('beforeend', html);
+  estiloPopup();
 
-  document.getElementById('deleteOnlyLyrics').addEventListener('click', () => eliminarSoloCantante(key));
-  document.getElementById('deleteBoth').addEventListener('click', () => eliminarAmbasVersiones(key));
-  document.getElementById('cancelDelete').addEventListener('click', cerrarPopUp);
+  document.getElementById('saveChanges').onclick = () => guardarEdicion(key);
+  document.getElementById('cancelChanges').onclick = cerrarPopUp;
+}
+
+function guardarEdicion(key) {
+  const title = document.getElementById("songTitle").value.trim();
+  const text = document.getElementById("songText").value.trim();
+  if (!title || !text) return alert("Completa los campos");
+  set(ref(db, 'songsCantante/' + key), { title, text }).then(() => {
+    cerrarPopUp();
+    cargarDatos();
+  });
+}
+
+function confirmarEliminar(key) {
+  const html = `
+    <div class="popup-overlay">
+      <div class="popup-container">
+        <h2>¿Qué deseas eliminar?</h2>
+        <p>Selecciona si deseas eliminar solo la letra o también la alabanza con acordes.</p>
+        <div class="popup-buttons">
+          <button id="deleteLyrics">🧾 Solo letras</button>
+          <button id="deleteBoth">🎵 Letra y acordes</button>
+          <button id="cancelDelete">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', html);
+  estiloPopup();
+  document.getElementById("deleteLyrics").onclick = () => eliminarSoloCantante(key);
+  document.getElementById("deleteBoth").onclick = () => eliminarAmbas(key);
+  document.getElementById("cancelDelete").onclick = cerrarPopUp;
 }
 
 function eliminarSoloCantante(key) {
-  remove(ref(db, 'songsCantante/' + key))
-    .then(() => {
-      alert("Letra eliminada correctamente.");
-      cerrarPopUp();
-      cargarAlabanzas();
-    })
-    .catch(() => {
-      alert("Error al eliminar la letra.");
-    });
+  remove(ref(db, 'songsCantante/' + key)).then(() => {
+    cerrarPopUp();
+    cargarDatos();
+  });
 }
 
-function eliminarAmbasVersiones(key) {
+function eliminarAmbas(key) {
   const updates = {
     [`songsCantante/${key}`]: null,
     [`songsMusico/${key}`]: null
   };
-  set(ref(db), updates)
-    .then(() => {
-      alert("Letra y acordes eliminados correctamente.");
-      cerrarPopUp();
-      cargarAlabanzas();
-    })
-    .catch(() => {
-      alert("Error al eliminar ambas versiones.");
-    });
+  set(ref(db), updates).then(() => {
+    cerrarPopUp();
+    cargarDatos();
+  });
 }
 
-function agregarEstilos() {
-  // Puedes mantener el estilo anterior aquí si ya lo tienes
+function cerrarPopUp() {
+  document.querySelector(".popup-overlay")?.remove();
+}
+
+function estiloPopup() {
+  const s = document.createElement("style");
+  s.textContent = `
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    .popup-container {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .popup-container input, .popup-container textarea {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .popup-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .popup-buttons button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      background: #313293;
+      color: white;
+    }
+    .popup-buttons button:hover {
+      opacity: 0.9;
+    }
+    .alabanza-card {
+      background: #fff;
+      color: #313293;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin: 10px auto;
+      max-width: 680px;
+      box-shadow: 0 2px 6px #00000033;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .badge {
+      background: #eee;
+      color: #555;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 12px;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn-edit, .btn-delete {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-edit {
+      background-color: #4caf50;
+      color: white;
+    }
+    .btn-delete {
+      background-color: #f44336;
+      color: white;
+    }
+  `;
+  document.head.appendChild(s);
 }
