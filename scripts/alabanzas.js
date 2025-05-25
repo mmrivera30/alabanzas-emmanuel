@@ -28,7 +28,7 @@ window.login = () => {
 };
 
 onAuthStateChanged(auth, user => {
-  if (user?.uid === UID_AUTORIZADO) {
+  if (UID_AUTORIZADO.includes(user?.uid)) {
     cargarDatos();
   } else {
     alert("Acceso restringido.");
