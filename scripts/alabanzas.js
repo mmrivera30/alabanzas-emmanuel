@@ -17,7 +17,7 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-const UID_AUTORIZADO = "lO3MhmpBIdeVwdUyI9oRGCZizj32";
+const UID_AUTORIZADO =["lWrfrkQSxeNX1JbavN8djnQ3fg62", "lO3MhmpBIdeVwdUyI9oRGCZizj32"];
 let letras = {};
 let acordes = {};
 const lista = document.getElementById("listaAlabanzas");
