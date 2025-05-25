@@ -63,8 +63,9 @@ function mostrarAlabanzas() {
     const existeLetras = letra && letra.text;
     const existeAcordes = cancion && cancion.text;
 
-    if ((tipo === "letras" && !existeLetras) ||
-        (tipo === "acordes" && !existeAcordes)) return;
+    if (tipo === "letras" && !existeLetras) return;
+    if (tipo === "acordes" && !existeAcordes) return;
+    if (tipo === "todas" && !existeLetras && !existeAcordes) return;
 
     const card = document.createElement("div");
     card.className = "alabanza-card";
@@ -168,89 +169,19 @@ function cerrarPopUp() {
 
 function estiloPopup() {
   const s = document.createElement("style");
-  s.textContent = `
-    .popup-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.6);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 9999;
-    }
-    .popup-container {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      width: 90%;
-      max-width: 500px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    .popup-container input, .popup-container textarea {
-      width: 100%;
-      margin: 8px 0;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    .popup-buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .popup-buttons button {
-      padding: 8px 14px;
-      border-radius: 6px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      background: #313293;
-      color: white;
-    }
-    .popup-buttons button:hover {
-      opacity: 0.9;
-    }
-    .alabanza-card {
-      background: #fff;
-      color: #313293;
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin: 10px auto;
-      max-width: 680px;
-      box-shadow: 0 2px 6px #00000033;
-    }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .badge {
-      background: #eee;
-      color: #555;
-      font-size: 12px;
-      padding: 4px 8px;
-      border-radius: 12px;
-    }
-    .card-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .btn-edit, .btn-delete {
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .btn-edit {
-      background-color: #4caf50;
-      color: white;
-    }
-    .btn-delete {
-      background-color: #f44336;
-      color: white;
-    }
-  `;
+  if (document.head.contains(s)) return;
+  s.textContent = `.popup-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.popup-container{background:white;border-radius:12px;padding:20px;width:90%;max-width:500px;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.popup-container input,.popup-container textarea{width:100%;margin:8px 0;padding:10px;border-radius:6px;border:1px solid #ccc;}
+.popup-buttons{display:flex;justify-content:flex-end;gap:10px;margin-top:12px;}
+.popup-buttons button{padding:8px 14px;border-radius:6px;border:none;font-weight:bold;cursor:pointer;background:#313293;color:white;}
+.popup-buttons button:hover{opacity:0.9;}
+.alabanza-card{background:#fff;color:#313293;border-radius:12px;padding:14px 18px;margin:10px auto;max-width:680px;box-shadow:0 2px 6px #00000033;}
+.card-header{display:flex;justify-content:space-between;align-items:center;}
+.badge{background:#eee;color:#555;font-size:12px;padding:4px 8px;border-radius:12px;}
+.card-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:12px;}
+.btn-edit,.btn-delete{border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;}
+.btn-edit{background-color:#4caf50;color:white;}
+.btn-delete{background-color:#f44336;color:white;}`;
   document.head.appendChild(s);
 }
