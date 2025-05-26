@@ -11,7 +11,7 @@
       width: 100vw;
       height: 100vh;
       font-family: 'Courier New', monospace;
-      background: linear-gradient(120deg, #313293 60%, #4d53b6 100%);
+      background: #000; /* Fondo negro */
       color: white;
       display: flex;
       flex-direction: column;
@@ -30,6 +30,7 @@
     h1 {
       font-size: 16px;
       margin: 4px 0 10px;
+      color: #00ffff;
     }
 
     #display {
@@ -74,24 +75,23 @@
       text-align: center;
       border: none;
       font-weight: bold;
-      box-shadow: 0 2px 8px #2223a322;
+      box-shadow: 0 2px 8px #00000033;
       transition: background 0.2s, color 0.2s;
       cursor: pointer;
       box-sizing: border-box;
     }
 
     .btn-back:hover {
-      background: #313293;
-      color: #fff;
+      background: #00ffff;
+      color: #000;
     }
 
     footer {
       margin-top: 28px;
       text-align: center;
       font-size: 12px;
-      color: #fff;
+      color: #aaa;
       opacity: 0.7;
-      text-shadow: 0 1px 6px #313293;
     }
   </style>
 </head>
@@ -111,6 +111,3 @@
   <script type="module" src="./scripts/pantalla-musico.js"></script>
 </body>
 </html>
-
-
-
